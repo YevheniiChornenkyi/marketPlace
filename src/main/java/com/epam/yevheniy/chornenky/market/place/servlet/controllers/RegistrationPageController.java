@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class RegistrationPageController implements PageController {
 
-    public static final String JSP_PATH = "/WEB-INF/jsp/register.jsp";
+    public static final String JSP_PATH = "/WEB-INF/jsp/registration.jsp";
 
     @Override
     public void handle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

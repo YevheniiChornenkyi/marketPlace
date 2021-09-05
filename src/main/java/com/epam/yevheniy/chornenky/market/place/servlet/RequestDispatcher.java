@@ -3,6 +3,7 @@ package com.epam.yevheniy.chornenky.market.place.servlet;
 import com.epam.yevheniy.chornenky.market.place.ContextInitializer;
 import com.epam.yevheniy.chornenky.market.place.servlet.controllers.*;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +18,8 @@ public class RequestDispatcher extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        context = ContextInitializer.initializeContext();
+        ServletConfig servletConfig = getServletConfig();
+        context = ContextInitializer.initializeContext(servletConfig);
         this.pageControllers = context.getPageControllers();
     }
 

@@ -7,10 +7,10 @@ public class UserEntity {
     private final String surName;
     private final String psw;
     private final String email;
-    private final String role;
+    private final Role role;
     private final String id;
 
-    public UserEntity(String name, String surName, String psw, String email, String id, String role) {
+    public UserEntity(String name, String surName, String psw, String email, String id, Role role) {
         this.name = name;
         this.surName = surName;
         this.psw = psw;
@@ -39,7 +39,20 @@ public class UserEntity {
         return id;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
+    }
+    public enum Role {
+        ADMIN("1"), CUSTOMER("2");
+
+        private String id;
+
+        Role(String id) {
+            this.id = id;
+        }
+
+        public String getId() {
+            return id;
+        }
     }
 }

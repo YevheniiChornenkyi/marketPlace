@@ -6,8 +6,31 @@
          version="4.0">
 
     <servlet>
+        <display-name>request_dispatcher</display-name>
         <servlet-name>request_dispatcher</servlet-name>
         <servlet-class>com.epam.yevheniy.chornenky.market.place.servlet.RequestDispatcher</servlet-class>
+
+        <init-param>
+            <param-name>dbDriver</param-name>
+            <param-value>com.mysql.jdbc.Driver</param-value>
+        </init-param>
+        <init-param>
+            <param-name>dbURL</param-name>
+            <param-value>jdbc:mysql:// localhost:3306/</param-value>
+        </init-param>
+        <init-param>
+            <param-name>dbName</param-name>
+            <param-value>market</param-value>
+        </init-param>
+        <init-param>
+            <param-name>dbUserName</param-name>
+            <param-value>root</param-value>
+        </init-param>
+        <init-param>
+            <param-name>dbPassword</param-name>
+            <param-value>admin</param-value>
+        </init-param>
+
     </servlet>
     <servlet-mapping>
         <servlet-name>request_dispatcher</servlet-name>

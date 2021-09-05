@@ -1,7 +1,5 @@
 package com.epam.yevheniy.chornenky.market.place.servlet.controllers;
 
-import com.epam.yevheniy.chornenky.market.place.repositories.entities.UserEntity;
-import com.epam.yevheniy.chornenky.market.place.repositories.UserRepository;
 import com.epam.yevheniy.chornenky.market.place.exceptions.ValidationException;
 import com.epam.yevheniy.chornenky.market.place.services.UserService;
 import com.epam.yevheniy.chornenky.market.place.servlet.controllers.validators.ValidatorRegistrar;
@@ -16,7 +14,7 @@ import java.util.Map;
 
 public class UserRegistrationController implements PageController {
 
-    private static final String JSP_PATH_TO_REGISTER_PAGE = "/WEB-INF/jsp/register.jsp";
+    private static final String JSP_PATH_TO_REGISTRATION_PAGE = "/WEB-INF/jsp/registration.jsp";
     private static final String URL_LOGIN_PAGE = "/login";
 
     private final UserService userService;
@@ -40,7 +38,7 @@ public class UserRegistrationController implements PageController {
         }
         catch (ValidationException ex) {
             req.setAttribute("errorsMap", ex.getValidationMap());
-            req.getRequestDispatcher(JSP_PATH_TO_REGISTER_PAGE).forward(req, resp);
+            req.getRequestDispatcher(JSP_PATH_TO_REGISTRATION_PAGE).forward(req, resp);
         }
     }
 
