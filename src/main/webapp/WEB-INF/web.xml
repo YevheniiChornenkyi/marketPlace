@@ -30,6 +30,10 @@
             <param-name>dbPassword</param-name>
             <param-value>admin</param-value>
         </init-param>
+        <init-param>
+            <param-name>iconHomeDirectoryPath</param-name>
+            <param-value>D:/marketPlaceImages/</param-value>
+        </init-param>
 
     </servlet>
     <servlet-mapping>
@@ -52,7 +56,12 @@
     </filter>
     <filter-mapping>
         <filter-name>encoding_filter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/sfthgg</url-pattern>
     </filter-mapping>
+
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/WEB-INF/jsp/error-page.jsp</location>
+    </error-page>
 
 </web-app>

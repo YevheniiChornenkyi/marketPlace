@@ -29,6 +29,6 @@ public class RequestDispatcher extends HttpServlet {
         String requestURI = req.getRequestURI();
         String key = method + requestURI;
         PageController pageController = pageControllers.getOrDefault(key, context.getNotFoundPageController());
-        pageController.handle(req, resp);
+        pageController.process(req, resp);
     }
 }

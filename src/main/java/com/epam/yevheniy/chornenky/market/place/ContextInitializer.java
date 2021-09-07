@@ -1,9 +1,11 @@
 package com.epam.yevheniy.chornenky.market.place;
 
 import com.epam.yevheniy.chornenky.market.place.db.ConnectionManager;
-import com.epam.yevheniy.chornenky.market.place.repositories.InMemoryUserRepository;
+import com.epam.yevheniy.chornenky.market.place.repositories.GoodsRepository;
 import com.epam.yevheniy.chornenky.market.place.repositories.MySQLUserRepository;
 import com.epam.yevheniy.chornenky.market.place.repositories.UserRepository;
+import com.epam.yevheniy.chornenky.market.place.services.GoodsService;
+import com.epam.yevheniy.chornenky.market.place.services.ImageService;
 import com.epam.yevheniy.chornenky.market.place.services.UserService;
 import com.epam.yevheniy.chornenky.market.place.servlet.controllers.*;
 
@@ -27,34 +29,41 @@ public class ContextInitializer {
         private final NotFoundPageController notFoundPageController;
         private final UserRegistrationController userRegistrationController;
         private final RegistrationPageController registrationPageController;
+        private final ErrorPageController errorPageController;
         private final ConnectionManager connectionManager;
+        private final ImageController imageController;
 
         private final Map<String, PageController> pageControllers;
 
         private Context(ServletConfig servletConfig) {
             this.servletConfig = servletConfig;
             connectionManager = instantiateConnectionManager();
+
+
             UserRepository userRepository = new MySQLUserRepository(connectionManager);
+            GoodsRepository goodsRepository = new GoodsRepository(connectionManager);
+
+            ImageService imageService = new ImageService(servletConfig.getInitParameter("iconHomeDirectoryPath"));
             UserService userService = new UserService(userRepository);
+            GoodsService goodsService = new GoodsService(goodsRepository);
+
             authorizationController = new AuthorizationController(userService);
-
-            homePageController = new HomePageController();
-
+            homePageController = new HomePageController(goodsService);
             loginPageController = new LoginPageController();
-
             notFoundPageController = new NotFoundPageController();
-
             userRegistrationController = new UserRegistrationController(userService);
-
             registrationPageController = new RegistrationPageController();
+            errorPageController = new ErrorPageController();
+            imageController = new ImageController(imageService);
 
             pageControllers = new HashMap<>();
-
             pageControllers.put("GET/action/login", loginPageController);
             pageControllers.put("GET/action/home-page", homePageController);
             pageControllers.put("GET/action/registration", registrationPageController);
+            pageControllers.put("GET/action/error-page", errorPageController);
             pageControllers.put("POST/action/login", authorizationController);
             pageControllers.put("POST/action/registration", userRegistrationController);
+            pageControllers.put("GET/action/image", imageController);
         }
 
         public Map<String, PageController> getPageControllers() {

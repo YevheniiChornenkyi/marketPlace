@@ -5,7 +5,6 @@
         <link href="/static/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <link href="/static/css/registration.css" rel="stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta charset="UTF-8" />
     </head>
     <body>
         <form action="/registration" method="POST">
