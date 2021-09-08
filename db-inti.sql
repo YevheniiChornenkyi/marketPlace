@@ -58,7 +58,7 @@ CREATE TABLE goods (
     model VARCHAR(40),
     price VARCHAR(32) NOT NULL,
     category INT NOT NULL,
-    image_id VARCHAR(40),
+    image_name VARCHAR(40),
     description VARCHAR(200),
     manufacturer INT NOT NULL,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -72,10 +72,11 @@ CREATE TABLE goods (
 );
 
 INSERT INTO goods (name, price, category, description, manufacturer) VALUES ("Britva", "1000", "1", "Britva", "1");
-INSERT INTO goods (name, price, category, description, manufacturer) VALUES ("axe", "100500", "2", "Axe", "2");
+INSERT INTO goods (name, price, category, image_name, description, manufacturer) VALUES ("Axe", "100500", "2", "axe.png", "Axe", "2");
 
 CREATE TABLE images (
-    image_id VARCHAR(40) NOT NULL ,
+    image_id VARCHAR(40) NOT NULL,
+
     PRIMARY KEY (image_id)
 );
 

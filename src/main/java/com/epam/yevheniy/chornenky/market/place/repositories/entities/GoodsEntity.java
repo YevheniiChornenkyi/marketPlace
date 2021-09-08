@@ -4,22 +4,22 @@ import java.sql.Timestamp;
 
 public class GoodsEntity {
     private String model;
-    private int id;
+    private Integer id;
     private String price;
     private CategoryEntity category;
-    private String imageId;
+    private String imageName;
     private String description;
     private ManufacturerEntity manufacturer;
     private Timestamp created;
 
-    public GoodsEntity(String model, int id, String price, CategoryEntity category,
-                       String imageId, String description, ManufacturerEntity manufacturer, Timestamp created) {
+    public GoodsEntity(String model, Integer id, String price, CategoryEntity category,
+                       String imageName, String description, ManufacturerEntity manufacturer, Timestamp created) {
 
         this.model = model;
         this.id = id;
         this.price = price;
         this.category = category;
-        this.imageId = imageId;
+        this.imageName = imageName;
         this.description = description;
         this.manufacturer = manufacturer;
         this.created = created;
@@ -41,8 +41,8 @@ public class GoodsEntity {
         return category;
     }
 
-    public String getImageId() {
-        return imageId;
+    public String getImageName() {
+        return imageName;
     }
 
     public String getDescription() {

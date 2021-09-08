@@ -71,7 +71,7 @@
                         <p>${user}</p>
                         <div class="col-lg-4 col-md-6 col-sm-10 offset-md-0 offset-sm-1">
                         <div class="card">
-                             <img class="card-img-top" src="/image?id=${item.getIconPath()}">
+                             <img class="card-img-top" src="/image?id=${item.getImageName()}">
                                     <h6><b>${item.getModel()}</b> </h6>
                                     <h6><b>${item.getCategoryName()}</b> </h6>
                                     <h6><b>${item.getManufacturerName()}</b> </h6>

@@ -29,9 +29,10 @@ public class ContextInitializer {
         private final NotFoundPageController notFoundPageController;
         private final UserRegistrationController userRegistrationController;
         private final RegistrationPageController registrationPageController;
-        private final ErrorPageController errorPageController;
         private final ConnectionManager connectionManager;
         private final ImageController imageController;
+        private final CreateGoodsController createGoodsController;
+        private final CreateGoodsControllerGET createGoodsControllerGET;
 
         private final Map<String, PageController> pageControllers;
 
@@ -45,7 +46,7 @@ public class ContextInitializer {
 
             ImageService imageService = new ImageService(servletConfig.getInitParameter("iconHomeDirectoryPath"));
             UserService userService = new UserService(userRepository);
-            GoodsService goodsService = new GoodsService(goodsRepository);
+            GoodsService goodsService = new GoodsService(goodsRepository, imageService);
 
             authorizationController = new AuthorizationController(userService);
             homePageController = new HomePageController(goodsService);
@@ -53,17 +54,20 @@ public class ContextInitializer {
             notFoundPageController = new NotFoundPageController();
             userRegistrationController = new UserRegistrationController(userService);
             registrationPageController = new RegistrationPageController();
-            errorPageController = new ErrorPageController();
             imageController = new ImageController(imageService);
+            createGoodsController = new CreateGoodsController(goodsService);
+            createGoodsControllerGET = new CreateGoodsControllerGET();
 
             pageControllers = new HashMap<>();
             pageControllers.put("GET/action/login", loginPageController);
             pageControllers.put("GET/action/home-page", homePageController);
             pageControllers.put("GET/action/registration", registrationPageController);
-            pageControllers.put("GET/action/error-page", errorPageController);
             pageControllers.put("POST/action/login", authorizationController);
             pageControllers.put("POST/action/registration", userRegistrationController);
+            pageControllers.put("GET/action/goods", createGoodsControllerGET);
             pageControllers.put("GET/action/image", imageController);
+            pageControllers.put("POST/action/goods", createGoodsController);
+
         }
 
         public Map<String, PageController> getPageControllers() {

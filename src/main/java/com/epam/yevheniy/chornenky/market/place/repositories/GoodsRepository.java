@@ -10,10 +10,11 @@ import org.apache.log4j.Logger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class GoodsRepository {
 
-    public static final String FIND_ALL_QUERY = "SELECT goods.id AS goods_id, goods.model, goods.price, categories.category_name, categories.id AS category_id, goods.icon_path, goods.description, manufacturers.manufacturer_name, manufacturers.id AS manufacturer_id , goods.created FROM goods LEFT JOIN categories ON goods.category=categories.id LEFT JOIN manufacturers ON goods.manufacturer=manufacturers.id";
+    public static final String FIND_ALL_QUERY = "SELECT goods.id AS goods_id, goods.model, goods.price, categories.category_name, categories.id AS category_id, goods.image_name, goods.description, manufacturers.manufacturer_name, manufacturers.id AS manufacturer_id , goods.created FROM goods LEFT JOIN categories ON goods.category=categories.id LEFT JOIN manufacturers ON goods.manufacturer=manufacturers.id";
     private static final Logger LOGGER = Logger.getLogger(GoodsRepository.class);
 
     private final ConnectionManager connectionManager;
@@ -35,7 +36,7 @@ public class GoodsRepository {
                 goodsEntityList.add(goodsEntity);
             }
         } catch (SQLException e) {
-            LOGGER.error("Problem in goods repository", e);
+            LOGGER.debug("Problem in goods repository", e);
             throw new DBException();
         }
         return goodsEntityList;
@@ -47,11 +48,11 @@ public class GoodsRepository {
         String model = resultSet.getString("model");
         int id = resultSet.getInt("goods_id");
         String price = resultSet.getString("price");
-        String iconPath = resultSet.getString("icon_path");
+        String imageName = resultSet.getString("image_name");
         String description = resultSet.getString("description");
         Timestamp created = resultSet.getTimestamp("created");
 
-        return new GoodsEntity(model, id, price, category, iconPath, description, manufacturer, created);
+        return new GoodsEntity(model, id, price, category, imageName, description, manufacturer, created);
     }
 
     private CategoryEntity extractCategory(ResultSet resultSet) throws SQLException {
@@ -64,5 +65,17 @@ public class GoodsRepository {
         int id = resultSet.getInt("manufacturer_id");
         String name = resultSet.getString("manufacturer_name");
         return new ManufacturerEntity(id, name);
+    }
+
+    public Optional<ManufacturerEntity> findManufacturerById(int manufacturer) {
+        return null;
+    }
+
+    public Optional<CategoryEntity> findCategoryById(int category) {
+        return null;
+    }
+
+    public void createGoods(GoodsEntity goodsEntity) {
+
     }
 }

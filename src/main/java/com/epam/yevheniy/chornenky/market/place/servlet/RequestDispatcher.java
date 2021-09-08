@@ -1,7 +1,7 @@
 package com.epam.yevheniy.chornenky.market.place.servlet;
 
 import com.epam.yevheniy.chornenky.market.place.ContextInitializer;
-import com.epam.yevheniy.chornenky.market.place.servlet.controllers.*;
+import com.epam.yevheniy.chornenky.market.place.servlet.controllers.PageController;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;

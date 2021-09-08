@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Objects;
 
 public class ImageController implements PageController{
 
@@ -25,8 +26,8 @@ public class ImageController implements PageController{
     @Override
     public void handle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            String imageId = req.getParameter("id");
-            byte[] imageByteArray = imageService.getImageById(imageId);
+            String imageName = req.getParameter("id").equals("") ? null : req.getParameter("id");
+            byte[] imageByteArray = imageService.getImageById(imageName);
             ServletOutputStream outputStream = resp.getOutputStream();
             outputStream.write(imageByteArray);
         } catch (FileNotFoundException e) {

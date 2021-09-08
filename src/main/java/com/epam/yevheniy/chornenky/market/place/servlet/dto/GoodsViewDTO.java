@@ -1,6 +1,6 @@
 package com.epam.yevheniy.chornenky.market.place.servlet.dto;
 
-public class GoodsViewDto {
+public class GoodsViewDTO {
     private int id;
     private String model;
     private String price;
@@ -9,7 +9,7 @@ public class GoodsViewDto {
     private String description;
     private String manufacturerName;
 
-    public GoodsViewDto(int id, String model, String price, String categoryName,
+    public GoodsViewDTO(int id, String model, String price, String categoryName,
                         String imageId, String description, String manufacturerName) {
 
         this.id = id;
@@ -33,7 +33,7 @@ public class GoodsViewDto {
         return categoryName;
     }
 
-    public String getImageId() {
+    public String getImageName() {
         return imageId;
     }
 
