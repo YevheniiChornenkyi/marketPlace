@@ -23,6 +23,8 @@ public class TomcatRunner {
                 "/", new File(webappDirLocation).getAbsolutePath()
         );
 
+        ctx.setAllowCasualMultipartParsing(true);
+
         // Declare an alternative location for your "WEB-INF/classes" dir
         // Servlet 3.0 annotation will work
         final File additionWebInfClasses = new File("target/classes");

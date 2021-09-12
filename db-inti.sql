@@ -19,7 +19,7 @@ CREATE TABLE users(
     psw VARCHAR(40) NOT NULL,
     role_id VARCHAR(36) NOT NULL,
     email VARCHAR(40) NOT NULL,
-    is_active BIT(1) DEFAULT 0 NOT NULL,
+    is_active BIT(1) DEFAULT 1 NOT NULL,
     PRIMARY KEY (id),
         FOREIGN KEY ( role_id )
             REFERENCES roles(id)

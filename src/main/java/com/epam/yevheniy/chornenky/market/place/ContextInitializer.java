@@ -31,8 +31,8 @@ public class ContextInitializer {
         private final RegistrationPageController registrationPageController;
         private final ConnectionManager connectionManager;
         private final ImageController imageController;
-        private final CreateGoodsController createGoodsController;
-        private final CreateGoodsControllerGET createGoodsControllerGET;
+        private final CreateGoodsControllerPost createGoodsControllerPost;
+        private final CreateGoodsControllerGet createGoodsControllerGET;
 
         private final Map<String, PageController> pageControllers;
 
@@ -55,8 +55,8 @@ public class ContextInitializer {
             userRegistrationController = new UserRegistrationController(userService);
             registrationPageController = new RegistrationPageController();
             imageController = new ImageController(imageService);
-            createGoodsController = new CreateGoodsController(goodsService);
-            createGoodsControllerGET = new CreateGoodsControllerGET();
+            createGoodsControllerPost = new CreateGoodsControllerPost(goodsService);
+            createGoodsControllerGET = new CreateGoodsControllerGet(goodsService);
 
             pageControllers = new HashMap<>();
             pageControllers.put("GET/action/login", loginPageController);
@@ -66,7 +66,7 @@ public class ContextInitializer {
             pageControllers.put("POST/action/registration", userRegistrationController);
             pageControllers.put("GET/action/goods", createGoodsControllerGET);
             pageControllers.put("GET/action/image", imageController);
-            pageControllers.put("POST/action/goods", createGoodsController);
+            pageControllers.put("POST/action/goods", createGoodsControllerPost);
 
         }
 

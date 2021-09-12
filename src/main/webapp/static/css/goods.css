@@ -66,3 +66,9 @@ a {
     font-size: small;
     padding-left: 10px;
 }
+
+.select-css {
+    display: block;
+    padding: .6em 1.4em .5em .8em; width: 100%;
+}
+

@@ -8,7 +8,7 @@
     <body>
         <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom">
         <a class="navbar-brand ml-2 font-weight-bold" href="/"><span id="orange">Kharkiv tools</span></a>
-            <div>
+            <div class="make-center">
                 <c:choose>
                     <c:when test="${empty authentication}">
                         <div><h6>Welcome visitor.

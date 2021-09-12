@@ -9,6 +9,7 @@ public class UserEntity {
     private final String email;
     private final Role role;
     private final String id;
+    private String isActive = "1";
 
     public UserEntity(String name, String surName, String psw, String email, String id, Role role) {
         this.name = name;
@@ -54,5 +55,13 @@ public class UserEntity {
         public String getId() {
             return id;
         }
+    }
+
+    public String getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(String isActive) {
+        this.isActive = isActive;
     }
 }

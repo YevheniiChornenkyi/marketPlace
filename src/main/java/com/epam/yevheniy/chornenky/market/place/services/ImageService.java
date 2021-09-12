@@ -1,12 +1,17 @@
 package com.epam.yevheniy.chornenky.market.place.services;
 
+import com.epam.yevheniy.chornenky.market.place.exceptions.FileCreationException;
 import com.epam.yevheniy.chornenky.market.place.exceptions.FileNotFoundException;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 public class ImageService {
 
@@ -56,6 +61,26 @@ public class ImageService {
     }
 
     public String saveImage(byte[] image) {
+        if (Objects.nonNull(image)) {
+            String fileName = UUID.randomUUID().toString();
+            try {
+                File file = new File(ICON_HOME_DIRECTORY_PATH + fileName);
+                return file.createNewFile() ? writeImage(file, image) : NO_ICON_NAME;
+            } catch (IOException e) {
+                LOGGER.error(String.format("Cannot create file at %s", ICON_HOME_DIRECTORY_PATH + fileName), e);
+                throw new FileCreationException();
+            }
+        }
         return NO_ICON_NAME;
+    }
+
+    private String writeImage(File image, byte[] bytesImage) {
+        try(OutputStream outputStream = new FileOutputStream(image)) {
+            outputStream.write(bytesImage);
+            return image.getName();
+        } catch (IOException e) {
+            LOGGER.error("Problems with writing file when try save");
+            throw new FileCreationException();
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.epam.yevheniy.chornenky.market.place.repositories.entities;
 import java.sql.Timestamp;
 
 public class GoodsEntity {
+    private String name;
     private String model;
     private Integer id;
     private String price;
@@ -12,9 +13,8 @@ public class GoodsEntity {
     private ManufacturerEntity manufacturer;
     private Timestamp created;
 
-    public GoodsEntity(String model, Integer id, String price, CategoryEntity category,
-                       String imageName, String description, ManufacturerEntity manufacturer, Timestamp created) {
-
+    public GoodsEntity(String name, String model, Integer id, String price, CategoryEntity category, String imageName, String description, ManufacturerEntity manufacturer, Timestamp created) {
+        this.name = name;
         this.model = model;
         this.id = id;
         this.price = price;
@@ -55,5 +55,9 @@ public class GoodsEntity {
 
     public Timestamp getCreated() {
         return created;
+    }
+
+    public String getName() {
+        return name;
     }
 }

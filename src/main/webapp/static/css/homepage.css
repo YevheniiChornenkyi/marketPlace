@@ -55,3 +55,9 @@
     width: 100%;
     opacity: 0.9;
 }
+
+.make-center {
+    margin-left: auto;
+    margin-right: auto;
+
+}

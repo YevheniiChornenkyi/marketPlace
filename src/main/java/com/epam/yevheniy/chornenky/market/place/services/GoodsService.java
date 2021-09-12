@@ -5,10 +5,11 @@ import com.epam.yevheniy.chornenky.market.place.repositories.GoodsRepository;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.CategoryEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.GoodsEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.ManufacturerEntity;
+import com.epam.yevheniy.chornenky.market.place.servlet.dto.CategoryDto;
 import com.epam.yevheniy.chornenky.market.place.servlet.dto.CreateGoodsDTO;
 import com.epam.yevheniy.chornenky.market.place.servlet.dto.GoodsViewDTO;
+import com.epam.yevheniy.chornenky.market.place.servlet.dto.ManufacturerDto;
 
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,13 +48,14 @@ public class GoodsService {
             imageName = imageService.saveImage(createGoodsDTO.getImage());
         }
 
+        String name = createGoodsDTO.getName();
         String model = createGoodsDTO.getModel();
         String price = createGoodsDTO.getPrice();
         CategoryEntity category = new CategoryEntity(createGoodsDTO.getCategory(), null);
         String description = createGoodsDTO.getDescription();
         ManufacturerEntity manufacturer = new ManufacturerEntity(createGoodsDTO.getManufacturer(), null);
 
-        GoodsEntity goodsEntity = new GoodsEntity(model, null, price, category, imageName, description, manufacturer, null);
+        GoodsEntity goodsEntity = new GoodsEntity(name, model, null, price, category, imageName, description, manufacturer, null);
         goodsRepository.createGoods(goodsEntity);
     }
 
@@ -72,6 +74,32 @@ public class GoodsService {
         if (!validationMap.isEmpty()) {
             throw new ValidationException(validationMap);
         }
+    }
+
+    public List<CategoryDto> getCategoriesDtoList() {
+        List<CategoryEntity> categoriesListEntity = goodsRepository.findAllCategories();
+        return categoriesListEntity.stream()
+                .map(this::categoryEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    private CategoryDto categoryEntityToDto(CategoryEntity categoryEntity) {
+        int id = categoryEntity.getId();
+        String name = categoryEntity.getName();
+        return new CategoryDto(id, name);
+    }
+
+    public List<ManufacturerDto> getManufacturersDtoList() {
+        List<ManufacturerEntity> manufacturersListEntity = goodsRepository.findAllManufacturers();
+        return manufacturersListEntity.stream()
+                .map(this::manufacturerEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    private ManufacturerDto manufacturerEntityToDto(ManufacturerEntity manufacturerEntity) {
+        int id = manufacturerEntity.getId();
+        String name = manufacturerEntity.getName();
+        return new ManufacturerDto(id, name);
     }
 }
 
