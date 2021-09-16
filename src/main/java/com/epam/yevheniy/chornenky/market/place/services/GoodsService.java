@@ -5,10 +5,7 @@ import com.epam.yevheniy.chornenky.market.place.repositories.GoodsRepository;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.CategoryEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.GoodsEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.ManufacturerEntity;
-import com.epam.yevheniy.chornenky.market.place.servlet.dto.CategoryDto;
-import com.epam.yevheniy.chornenky.market.place.servlet.dto.CreateGoodsDTO;
-import com.epam.yevheniy.chornenky.market.place.servlet.dto.GoodsViewDTO;
-import com.epam.yevheniy.chornenky.market.place.servlet.dto.ManufacturerDto;
+import com.epam.yevheniy.chornenky.market.place.servlet.dto.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,18 +28,21 @@ public class GoodsService {
 
     private GoodsViewDTO mapToDTO(GoodsEntity goodsEntity) {
         int id = goodsEntity.getId();
+        String name = goodsEntity.getName();
         String model = goodsEntity.getModel();
         String price = goodsEntity.getPrice();
         String categoryName = goodsEntity.getCategory().getName();
         String imageName = goodsEntity.getImageName();
         String description = goodsEntity.getDescription();
         String manufacturerName = goodsEntity.getManufacturer().getName();
-        return new GoodsViewDTO(id, model, price, categoryName, imageName, description, manufacturerName);
+        return new GoodsViewDTO(id, model, price, categoryName, imageName, description, manufacturerName, name);
     }
 
     public void createGoods(CreateGoodsDTO createGoodsDTO) {
-        validate(createGoodsDTO);
         String imageName = null;
+        int categoryId = createGoodsDTO.getCategory();
+        int manufacturerId = createGoodsDTO.getManufacturer();
+        categoryAndManufacturerValidate(categoryId, manufacturerId);
 
         if (Objects.nonNull(createGoodsDTO.getImage())) {
             imageName = imageService.saveImage(createGoodsDTO.getImage());
@@ -51,17 +51,47 @@ public class GoodsService {
         String name = createGoodsDTO.getName();
         String model = createGoodsDTO.getModel();
         String price = createGoodsDTO.getPrice();
-        CategoryEntity category = new CategoryEntity(createGoodsDTO.getCategory(), null);
+        CategoryEntity category = new CategoryEntity(categoryId, null);
         String description = createGoodsDTO.getDescription();
-        ManufacturerEntity manufacturer = new ManufacturerEntity(createGoodsDTO.getManufacturer(), null);
+        ManufacturerEntity manufacturer = new ManufacturerEntity(manufacturerId, null);
 
         GoodsEntity goodsEntity = new GoodsEntity(name, model, null, price, category, imageName, description, manufacturer, null);
         goodsRepository.createGoods(goodsEntity);
     }
 
-    private void validate(CreateGoodsDTO createGoodsDTO) {
-        Optional<CategoryEntity> categoryEntityOptional = goodsRepository.findCategoryById(createGoodsDTO.getCategory());
-        Optional<ManufacturerEntity> manufacturerEntityOptional = goodsRepository.findManufacturerById(createGoodsDTO.getManufacturer());
+    public void editGoods(EditGoodsDTO editGoodsDTO) {
+        int category = editGoodsDTO.getCategory();
+        int manufacturer = editGoodsDTO.getManufacturer();
+
+        categoryAndManufacturerValidate(category, manufacturer);
+
+        String name = editGoodsDTO.getName();
+        String model = editGoodsDTO.getModel();
+        String price = editGoodsDTO.getPrice();
+        String description = editGoodsDTO.getDescription();
+        byte[] imageBytes = editGoodsDTO.getImage();
+        String imageName;
+        String oldImageName = editGoodsDTO.getOldImageName();
+        int id = editGoodsDTO.getId();
+        if (Objects.nonNull(imageBytes)) {
+            imageName = imageService.saveImage(imageBytes);
+            if (!oldImageName.equals("null")) {
+                imageService.deleteImageByName(oldImageName);
+            }
+        } else {
+            imageName = oldImageName;
+        }
+        CategoryEntity categoryEntity = new CategoryEntity(category, null);
+        ManufacturerEntity manufacturerEntity = new ManufacturerEntity(manufacturer, null);
+        GoodsEntity goodsEntity = new GoodsEntity(name, model, id, price, categoryEntity,
+                imageName, description, manufacturerEntity, null);
+
+        goodsRepository.editGoods(goodsEntity);
+    }
+
+    private void categoryAndManufacturerValidate(int category, int manufacturer) {
+        Optional<CategoryEntity> categoryEntityOptional = goodsRepository.findCategoryById(category);
+        Optional<ManufacturerEntity> manufacturerEntityOptional = goodsRepository.findManufacturerById(manufacturer);
 
         Map<String, String> validationMap = new HashMap<>();
 
@@ -100,6 +130,11 @@ public class GoodsService {
         int id = manufacturerEntity.getId();
         String name = manufacturerEntity.getName();
         return new ManufacturerDto(id, name);
+    }
+
+    public Optional<GoodsViewDTO> getById(String goodsId) {
+        Optional<GoodsEntity> goodsEntityOptional = goodsRepository.findGoodsById(goodsId);
+        return goodsEntityOptional.map(this::mapToDTO);
     }
 }
 

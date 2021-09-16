@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class HomePageController implements PageController{
+public class HomePageController extends PageController {
 
     private static final String JSP_PATH = "/WEB-INF/jsp/home-page.jsp";
 

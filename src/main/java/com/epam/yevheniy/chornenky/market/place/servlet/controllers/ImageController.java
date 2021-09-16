@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Objects;
 
-public class ImageController implements PageController{
+public class ImageController extends PageController {
 
     private final ImageService imageService;
 

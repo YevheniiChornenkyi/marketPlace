@@ -25,6 +25,9 @@ public class UserService {
         if (!user.getPsw().equals(psw)) {
             throw new AuthenticationException();
         }
+        if (!user.getIsActive()) {
+            throw new AuthenticationException("User is banned");
+        }
         return new Authentication(user.getName(), user.getSurName(), user.getEmail(), user.getRole(), user.getId());
     }
 

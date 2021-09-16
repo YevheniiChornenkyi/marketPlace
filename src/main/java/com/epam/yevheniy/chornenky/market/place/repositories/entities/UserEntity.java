@@ -9,7 +9,7 @@ public class UserEntity {
     private final String email;
     private final Role role;
     private final String id;
-    private String isActive = "1";
+    private Boolean isActive = false;
 
     public UserEntity(String name, String surName, String psw, String email, String id, Role role) {
         this.name = name;
@@ -18,6 +18,16 @@ public class UserEntity {
         this.email = email;
         this.id = id;
         this.role = role;
+    }
+
+    public UserEntity(String name, String surName, String psw, String email, String id, Role role, boolean isActive) {
+        this.name = name;
+        this.surName = surName;
+        this.psw = psw;
+        this.email = email;
+        this.id = id;
+        this.role = role;
+        this.isActive = isActive;
     }
 
     public String getName() {
@@ -43,10 +53,11 @@ public class UserEntity {
     public Role getRole() {
         return role;
     }
+
     public enum Role {
         ADMIN("1"), CUSTOMER("2");
 
-        private String id;
+        private final String id;
 
         Role(String id) {
             this.id = id;
@@ -57,11 +68,11 @@ public class UserEntity {
         }
     }
 
-    public String getIsActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 
-    public void setIsActive(String isActive) {
+    public void setIsActive(boolean isActive) {
         this.isActive = isActive;
     }
 }

@@ -1,8 +1,11 @@
 package com.epam.yevheniy.chornenky.market.place.services;
 
+import com.epam.yevheniy.chornenky.market.place.db.ConnectionManager;
 import com.epam.yevheniy.chornenky.market.place.exceptions.FileCreationException;
+import com.epam.yevheniy.chornenky.market.place.exceptions.FileDeleteException;
 import com.epam.yevheniy.chornenky.market.place.exceptions.FileNotFoundException;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,7 +18,7 @@ import java.util.UUID;
 
 public class ImageService {
 
-    private static final Logger LOGGER = Logger.getLogger(ImageService.class);
+    private static final Logger LOGGER = LogManager.getLogger(ConnectionManager.class);
     private static final String NO_ICON_NAME = "no-icon.png";
 
     private final String ICON_HOME_DIRECTORY_PATH;
@@ -81,6 +84,14 @@ public class ImageService {
         } catch (IOException e) {
             LOGGER.error("Problems with writing file when try save");
             throw new FileCreationException();
+        }
+    }
+
+    public void deleteImageByName(String oldImageName) {
+        File file = new File(ICON_HOME_DIRECTORY_PATH + oldImageName);
+        if (!file.delete()) {
+            LOGGER.error(String.format("Cannot delete file at %s", ICON_HOME_DIRECTORY_PATH + oldImageName));
+            throw new FileDeleteException();
         }
     }
 }

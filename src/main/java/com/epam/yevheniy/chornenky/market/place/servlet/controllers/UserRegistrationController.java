@@ -2,7 +2,7 @@ package com.epam.yevheniy.chornenky.market.place.servlet.controllers;
 
 import com.epam.yevheniy.chornenky.market.place.exceptions.ValidationException;
 import com.epam.yevheniy.chornenky.market.place.services.UserService;
-import com.epam.yevheniy.chornenky.market.place.servlet.controllers.validators.ValidatorRegistrar;
+import com.epam.yevheniy.chornenky.market.place.servlet.controllers.validators.RegistrarValidator;
 import com.epam.yevheniy.chornenky.market.place.servlet.dto.UserRegistrationDTO;
 
 import javax.servlet.ServletException;
@@ -12,9 +12,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserRegistrationController implements PageController {
+public class UserRegistrationController extends PageController {
 
-    private static final String JSP_PATH_TO_REGISTRATION_PAGE = "/WEB-INF/jsp/registration.jsp";
     private static final String URL_LOGIN_PAGE = "/login";
 
     private final UserService userService;
@@ -37,20 +36,20 @@ public class UserRegistrationController implements PageController {
             resp.sendRedirect(URL_LOGIN_PAGE);
         }
         catch (ValidationException ex) {
-            req.setAttribute("errorsMap", ex.getValidationMap());
-            req.getRequestDispatcher(JSP_PATH_TO_REGISTRATION_PAGE).forward(req, resp);
+            req.getSession().setAttribute("errorsMap", ex.getValidationMap());
+            resp.sendRedirect(URL_LOGIN_PAGE);
         }
     }
 
     private void validateRegistration(String email, String psw, String pswRepeat) {
         Map<String, String> validationMap = new HashMap<>();
-        if (!ValidatorRegistrar.loginValidate(email)) {
+        if (!RegistrarValidator.loginValidate(email)) {
             validationMap.put("email", "Invalid email format");
         }
-        if (!ValidatorRegistrar.pswValidate(psw)) {
+        if (!RegistrarValidator.pswValidate(psw)) {
             validationMap.put("psw", "Password must contain more than 6 characters, including Latin Cyrillic and numbers.");
         }
-        if (!ValidatorRegistrar.pswRepeatValidate(psw, pswRepeat)) {
+        if (!RegistrarValidator.pswRepeatValidate(psw, pswRepeat)) {
             validationMap.put("pswRepeat", "Password mismatch");
         }
         if (!validationMap.isEmpty()) {

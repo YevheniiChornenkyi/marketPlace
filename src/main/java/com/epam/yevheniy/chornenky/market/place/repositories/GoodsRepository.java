@@ -5,7 +5,8 @@ import com.epam.yevheniy.chornenky.market.place.exceptions.DBException;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.CategoryEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.GoodsEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.ManufacturerEntity;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,12 +16,14 @@ import java.util.Optional;
 public class GoodsRepository {
 
     public static final String FIND_ALL_QUERY = "SELECT goods.name, goods.id AS goods_id, goods.model, goods.price, categories.category_name, categories.id AS category_id, goods.image_name, goods.description, manufacturers.manufacturer_name, manufacturers.id AS manufacturer_id , goods.created FROM goods LEFT JOIN categories ON goods.category=categories.id LEFT JOIN manufacturers ON goods.manufacturer=manufacturers.id";
-    private static final Logger LOGGER = Logger.getLogger(GoodsRepository.class);
+    public static final String FIND_GOODS_BY_ID_QUERY = FIND_ALL_QUERY + " WHERE goods.id=?";
+    private static final Logger LOGGER = LogManager.getLogger(ConnectionManager.class);
     public static final String INSERT_GOODS_QUERY = "INSERT INTO goods (name, model, price, category, image_name, description, manufacturer) VALUE (?, ?, ?, ?, ?, ?, ?)";
     public static final String FIND_CATEGORY_BY_ID_QUERY = "SELECT categories.category_name, categories.id FROM categories WHERE id=?";
     public static final String FIND_MANUFACTURER_BY_ID_QUERY = "SELECT manufacturers.id, manufacturers.manufacturer_name FROM manufacturers WHERE id=?";
     public static final String FIND_ALL_CATEGORIES_QUERY = "SELECT * FROM categories";
     public static final String FIND_ALL_MANUFACTURERS_QUERY = "SELECT manufacturers.id, manufacturers.manufacturer_name FROM manufacturers";
+    public static final String EDIT_GOODS_QUERY = "UPDATE goods SET name=?, model=?, price=?, category=?, image_name=?, description=?, manufacturer=?, created=? WHERE id=?";
 
     private final ConnectionManager connectionManager;
 
@@ -163,6 +166,54 @@ public class GoodsRepository {
             return manufacturersEntityList;
         } catch (SQLException e) {
             LOGGER.error("Database problems, cannot get manufacturers table", e);
+            throw new DBException();
+        }
+    }
+
+    public Optional<GoodsEntity> findGoodsById(String goodsId) {
+
+        try (Connection connection = connectionManager.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_GOODS_BY_ID_QUERY);
+            preparedStatement.setString(1, goodsId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                CategoryEntity categoryEntity = extractCategory(resultSet);
+                ManufacturerEntity manufacturerEntity = extractManufacturer(resultSet);
+                GoodsEntity goodsEntity = createGoodsEntity(resultSet, categoryEntity, manufacturerEntity);
+                return Optional.of(goodsEntity);
+            }
+            return Optional.empty();
+        } catch (SQLException e) {
+            LOGGER.debug("Problem in goods repository", e);
+            throw new DBException();
+        }
+    }
+
+    public void editGoods(GoodsEntity goodsEntity) {
+        int id = goodsEntity.getId();
+        String name = goodsEntity.getName();
+        String model = goodsEntity.getModel();
+        String price = goodsEntity.getPrice();
+        int category = goodsEntity.getCategory().getId();
+        String imageName = goodsEntity.getImageName();
+        String description = goodsEntity.getDescription();
+        int manufacturer = goodsEntity.getManufacturer().getId();
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        try(Connection connection = connectionManager.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement
+                            (EDIT_GOODS_QUERY);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, model);
+            preparedStatement.setString(3, price);
+            preparedStatement.setInt(4, category);
+            preparedStatement.setString(5, imageName);
+            preparedStatement.setString(6, description);
+            preparedStatement.setInt(7, manufacturer);
+            preparedStatement.setTimestamp(8, timestamp);
+            preparedStatement.setInt(9, id);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            LOGGER.debug("Problem in goods repository. Cant edit goods with id:{}", id, e);
             throw new DBException();
         }
     }

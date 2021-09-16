@@ -1,7 +1,8 @@
 package com.epam.yevheniy.chornenky.market.place.db;
 
 import com.epam.yevheniy.chornenky.market.place.exceptions.DBException;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,7 +10,7 @@ import java.sql.SQLException;
 
 public class ConnectionManager {
     private static boolean dbDriverLoaded = false;
-    private static final Logger LOGGER = Logger.getLogger(ConnectionManager.class);
+    private static final Logger LOGGER = LogManager.getLogger(ConnectionManager.class);
 
     private final String dpDriver;
     private final String dbURL;

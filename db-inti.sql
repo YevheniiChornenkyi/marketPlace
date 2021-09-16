@@ -27,6 +27,7 @@ CREATE TABLE users(
 );
 
 INSERT INTO users (id, name, surname, psw, role_id, email) VALUES ("1", "Yevheniy" , "Chornenkiy", "login1", "1", "evgeny.chornenky@gmail.com" );
+INSERT INTO users (id, name, surname, psw, role_id, email, is_active) VALUES ("2", "Boris" , "Razor", "login1", "2", "boris@gmail.com", 0);
 
 CREATE TABLE categories (
      id INT NOT NULL AUTO_INCREMENT,

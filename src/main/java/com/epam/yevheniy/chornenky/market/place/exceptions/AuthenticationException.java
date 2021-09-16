@@ -1,9 +1,13 @@
 package com.epam.yevheniy.chornenky.market.place.exceptions;
 
 public class AuthenticationException extends CommonException {
-    private static final String MESSAGE = "Login or password incorrect";
+    private String MESSAGE = "Login or password incorrect";
 
     public AuthenticationException() {
+    }
+
+    public AuthenticationException(String MESSAGE) {
+        this.MESSAGE = MESSAGE;
     }
 
     @Override

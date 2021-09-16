@@ -3,12 +3,12 @@ package com.epam.yevheniy.chornenky.market.place.servlet.controllers.validators;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ValidatorRegistrar {
+public class RegistrarValidator {
 
     public static final String PSW_REGEX = "(?=.*[0-9])(?=.*[a-zа-яёії])[0-9a-zA-Zа-яА-ЯёЁіІїЇ!@#$%^&*]{6,}";
     public static final String LOGIN_REGEX = ".+@.+\\..+";
 
-    private ValidatorRegistrar() {}
+    private RegistrarValidator() {}
 
     public static boolean loginValidate(String login) {
         Pattern p = Pattern.compile(LOGIN_REGEX);

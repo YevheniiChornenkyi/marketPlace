@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-public class CreateGoodsControllerGet implements PageController{
+public class CreateGoodsControllerGet extends PageController {
     private final GoodsService goodsService;
 
     public static final String JSP_PATH = "/WEB-INF/jsp/goods.jsp";

@@ -11,10 +11,11 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 
-public class AuthorizationController implements PageController{
+public class AuthorizationController extends PageController {
 
-    private static final String JSP_PATH_TO_LOGIN_PAGE = "/WEB-INF/jsp/login.jsp";
+
     private static final String URL_HOME_PAGE = "/home-page";
+    public static final String URL_TO_LOGIN = "/login";
 
     private final UserService userService;
 
@@ -26,20 +27,18 @@ public class AuthorizationController implements PageController{
     public void handle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String psw = req.getParameter("psw");
+        HttpSession session = req.getSession();
         try {
             UserService.Authentication authentication = userService.authenticate(email, psw);
-            HttpSession session = req.getSession();
             session.setAttribute("authentication", authentication);
             resp.sendRedirect(URL_HOME_PAGE);
         } catch (ValidationException e ) {
-            req.setAttribute("errorsMap", e.getValidationMap());
-            req.getRequestDispatcher(JSP_PATH_TO_LOGIN_PAGE).forward(req, resp);
+            session.setAttribute("errorsMap", e.getValidationMap());
+            resp.sendRedirect(URL_TO_LOGIN);
         } catch (AuthenticationException e) {
-            req.setAttribute("errorsMap", Map.of("email", e.getMessage()));
-            req.getRequestDispatcher(JSP_PATH_TO_LOGIN_PAGE).forward(req, resp);
+            session.setAttribute("errorsMap", Map.of("email", e.getMessage()));
+            resp.sendRedirect(URL_TO_LOGIN);
         }
-
-        System.out.printf("");
     }
 }
 

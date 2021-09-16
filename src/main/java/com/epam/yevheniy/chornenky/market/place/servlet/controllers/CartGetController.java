@@ -5,12 +5,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class RegistrationPageController extends PageController {
+public class CartGetController extends PageController{
 
-    public static final String JSP_PATH = "/WEB-INF/jsp/registration.jsp";
+    public static final String JSP_PATH = "/WEB-INF/jsp/cart.jsp";
 
     @Override
-    public void handle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void handle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher(JSP_PATH).forward(req, resp);
     }
 }

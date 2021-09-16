@@ -2,7 +2,6 @@ package com.epam.yevheniy.chornenky.market.place;
 
 import com.epam.yevheniy.chornenky.market.place.db.ConnectionManager;
 import com.epam.yevheniy.chornenky.market.place.repositories.GoodsRepository;
-import com.epam.yevheniy.chornenky.market.place.repositories.MySQLUserRepository;
 import com.epam.yevheniy.chornenky.market.place.repositories.UserRepository;
 import com.epam.yevheniy.chornenky.market.place.services.GoodsService;
 import com.epam.yevheniy.chornenky.market.place.services.ImageService;
@@ -33,6 +32,11 @@ public class ContextInitializer {
         private final ImageController imageController;
         private final CreateGoodsControllerPost createGoodsControllerPost;
         private final CreateGoodsControllerGet createGoodsControllerGET;
+        private final AddItemToCartControllerPost addItemToCartControllerPost;
+        private final CartGetController cartGetController;
+        private final LogoutController logoutController;
+        private final EditGetController editGetController;
+        private final EditPOSTController editPOSTController;
 
         private final Map<String, PageController> pageControllers;
 
@@ -41,7 +45,7 @@ public class ContextInitializer {
             connectionManager = instantiateConnectionManager();
 
 
-            UserRepository userRepository = new MySQLUserRepository(connectionManager);
+            UserRepository userRepository = new UserRepository(connectionManager);
             GoodsRepository goodsRepository = new GoodsRepository(connectionManager);
 
             ImageService imageService = new ImageService(servletConfig.getInitParameter("iconHomeDirectoryPath"));
@@ -57,6 +61,11 @@ public class ContextInitializer {
             imageController = new ImageController(imageService);
             createGoodsControllerPost = new CreateGoodsControllerPost(goodsService);
             createGoodsControllerGET = new CreateGoodsControllerGet(goodsService);
+            addItemToCartControllerPost = new AddItemToCartControllerPost(goodsService);
+            cartGetController = new CartGetController();
+            logoutController = new LogoutController();
+            editGetController = new EditGetController(goodsService);
+            editPOSTController = new EditPOSTController(goodsService);
 
             pageControllers = new HashMap<>();
             pageControllers.put("GET/action/login", loginPageController);
@@ -67,7 +76,11 @@ public class ContextInitializer {
             pageControllers.put("GET/action/goods", createGoodsControllerGET);
             pageControllers.put("GET/action/image", imageController);
             pageControllers.put("POST/action/goods", createGoodsControllerPost);
-
+            pageControllers.put("POST/action/home-page", addItemToCartControllerPost);
+            pageControllers.put("GET/action/cart", cartGetController);
+            pageControllers.put("GET/action/logout", logoutController);
+            pageControllers.put("GET/action/edit", editGetController);
+            pageControllers.put("POST/action/edit", editPOSTController);
         }
 
         public Map<String, PageController> getPageControllers() {

@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class LoginPageController implements PageController {
+public class LoginPageController extends PageController {
     private static final String JSP_PATH = "/WEB-INF/jsp/login.jsp";
 
     @Override
