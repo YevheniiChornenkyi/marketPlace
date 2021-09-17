@@ -44,6 +44,23 @@
                                                    <div class="cart_item_title">Count</div>
                                                    <div class="cart_item_text">${item.getValue()}</div>
                                                </div>
+                                               <div class="cart_item_color cart_info_col">
+                                                    <form action="home-page" method="post">
+                                                       <input type="hidden" value="up" name="count">
+                                                       <input type="hidden" value="${item.getKey().getId()}" name="id">
+                                                       <button type="submit" class="button_count">+1</button>
+                                                    </form>
+                                                    <form action="home-page" method="post">
+                                                       <input type="hidden" value="down" name="count">
+                                                       <input type="hidden" value="${item.getKey().getId()}" name="id">
+                                                       <button type="submit" class="button_count">-1</button>
+                                                    </form>
+                                                    <form action="home-page" method="post">
+                                                       <input type="hidden" value="delete" name="count">
+                                                       <input type="hidden" value="${item.getKey().getId()}" name="id">
+                                                       <button type="submit" class="button_count">Delete</button>
+                                                    </form>
+                                               </div>
                                             </div>
                                         </li>
                                     </ul>

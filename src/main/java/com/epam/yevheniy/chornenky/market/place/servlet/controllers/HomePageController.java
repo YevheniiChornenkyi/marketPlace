@@ -19,7 +19,12 @@ public class HomePageController extends PageController {
 
     @Override
     public void handle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("goodsViewDTOList", goodsService.getGoodsViewDTOList());
+        String sort = req.getParameter("sort");
+        String order = req.getParameter("order");
+        String[] categories = req.getParameterValues("categories");
+
+        req.setAttribute("categoriesList", goodsService.getCategoriesDtoList());
+        req.setAttribute("goodsViewDTOList", goodsService.getSortedGoodsViewDTOList(sort, order, categories));
         req.getRequestDispatcher(JSP_PATH).forward(req, resp);
     }
 }

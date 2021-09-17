@@ -17,14 +17,24 @@ public class Cart {
         LOGGER.info("Added new item to cart now cart have {} items. Added item parameters: {}", getGoodsCount(), goodsViewDTO);
     }
 
+    public void increaseGoodsCount(int id) {
+        Optional<GoodsViewDTO> goodsViewDTOOptional = findIfPresent(id);
+        goodsViewDTOOptional.ifPresent(goodsDTO -> cart.computeIfPresent(goodsDTO, (item, count) -> count + 1));
+    }
+
     public void decreaseGoodsCount(int id) {
         Optional<GoodsViewDTO> goodsViewDTOOptional = findIfPresent(id);
         goodsViewDTOOptional.ifPresent((goodsDto) -> {
-            cart.computeIfPresent(goodsDto, (item, count) -> count--);
+            cart.computeIfPresent(goodsDto, (item, count) -> count - 1);
             if (cart.get(goodsDto) <= 0) {
                 cart.remove(goodsDto);
             }
         });
+    }
+
+    public void deleteGoods(int id) {
+        Optional<GoodsViewDTO> goodsViewDTOOptional = findIfPresent(id);
+        goodsViewDTOOptional.ifPresent(cart::remove);
     }
 
     private Optional<GoodsViewDTO> findIfPresent(int id) {

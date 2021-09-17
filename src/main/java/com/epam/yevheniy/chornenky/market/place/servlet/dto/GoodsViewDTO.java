@@ -8,21 +8,23 @@ public class GoodsViewDTO {
     private final String model;
     private final String price;
     private final String categoryName;
-    private final String imageId;
+    private final String imageName;
     private final String description;
     private final String manufacturerName;
+    private final String created;
 
     public GoodsViewDTO(int id, String model, String price, String categoryName,
-                        String imageId, String description, String manufacturerName, String name) {
+                        String imageName, String description, String manufacturerName, String name, String created) {
 
         this.id = id;
         this.model = model;
         this.price = price;
         this.categoryName = categoryName;
-        this.imageId = imageId;
+        this.imageName = imageName;
         this.description = description;
         this.manufacturerName = manufacturerName;
         this.name = name;
+        this.created = created;
     }
 
     @Override
@@ -45,7 +47,7 @@ public class GoodsViewDTO {
                 ", model='" + model + '\'' +
                 ", price='" + price + '\'' +
                 ", categoryName='" + categoryName + '\'' +
-                ", imageId='" + imageId + '\'' +
+                ", imageId='" + imageName + '\'' +
                 ", description='" + description + '\'' +
                 ", manufacturerName='" + manufacturerName + '\'' +
                 '}';
@@ -68,7 +70,7 @@ public class GoodsViewDTO {
     }
 
     public String getImageName() {
-        return imageId;
+        return imageName;
     }
 
     public String getDescription() {
@@ -81,5 +83,9 @@ public class GoodsViewDTO {
 
     public int getId() {
         return id;
+    }
+
+    public String getCreated() {
+        return created;
     }
 }

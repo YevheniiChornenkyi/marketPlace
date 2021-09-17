@@ -2,9 +2,11 @@ package com.epam.yevheniy.chornenky.market.place.repositories;
 
 import com.epam.yevheniy.chornenky.market.place.db.ConnectionManager;
 import com.epam.yevheniy.chornenky.market.place.exceptions.DBException;
+import com.epam.yevheniy.chornenky.market.place.models.SiteFilterBuilder;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.CategoryEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.GoodsEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.ManufacturerEntity;
+import com.epam.yevheniy.chornenky.market.place.servlet.dto.GoodsViewDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,6 +26,7 @@ public class GoodsRepository {
     public static final String FIND_ALL_CATEGORIES_QUERY = "SELECT * FROM categories";
     public static final String FIND_ALL_MANUFACTURERS_QUERY = "SELECT manufacturers.id, manufacturers.manufacturer_name FROM manufacturers";
     public static final String EDIT_GOODS_QUERY = "UPDATE goods SET name=?, model=?, price=?, category=?, image_name=?, description=?, manufacturer=?, created=? WHERE id=?";
+    public static final String TEMPLATE_SORTED_GOODS_QUERY = "SELECT goods.id, goods.name, goods.model, goods.price, categories.category_name, goods.image_name, goods.description, manufacturers.manufacturer_name, goods.created FROM goods LEFT JOIN categories ON goods.category=categories.id LEFT JOIN manufacturers ON goods.manufacturer=manufacturers.id ";
 
     private final ConnectionManager connectionManager;
 
@@ -216,5 +219,53 @@ public class GoodsRepository {
             LOGGER.debug("Problem in goods repository. Cant edit goods with id:{}", id, e);
             throw new DBException();
         }
+    }
+
+    public List<GoodsViewDTO> getSortedGoodsViewDtoList(SiteFilterBuilder.SiteFilter siteFilter) {
+        try(Connection connection = connectionManager.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(querySortedGoodsViewDtoList(siteFilter));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<GoodsViewDTO> goodsViewDTOList = new ArrayList<>();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String model = resultSet.getString("model");
+                String price = resultSet.getString("price");
+                String category = resultSet.getString("category_name");
+                String imageName = resultSet.getString("image_name");
+                String description = resultSet.getString("description");
+                String manufacturer = resultSet.getString("manufacturer_name");
+                String created = resultSet.getString("created");
+                GoodsViewDTO goodsViewDTO = new GoodsViewDTO(id, model, price, category, imageName, description, manufacturer, name, created);
+                goodsViewDTOList.add(goodsViewDTO);
+            }
+            return goodsViewDTOList;
+        } catch (SQLException e) {
+            LOGGER.error("Query or Database problem. Cant find goods to print at homePage");
+            throw new DBException();
+        }
+    }
+
+    private String querySortedGoodsViewDtoList(SiteFilterBuilder.SiteFilter siteFilter) {
+        List<Integer> categories = siteFilter.getCategories();
+        SiteFilterBuilder.SortedType sortedType = siteFilter.getSortedType();
+        SiteFilterBuilder.Order order = siteFilter.getOrder();
+
+        StringBuilder query = new StringBuilder(TEMPLATE_SORTED_GOODS_QUERY);
+        if (categories.size() != 0) {
+            query.append("WHERE");
+            for (Integer category : categories) {
+                query.append(" goods.category=")
+                        .append(category)
+                        .append(" OR");
+            }
+            query.delete(query.length() - 2, query.length());
+        }
+        query
+                .append("ORDER BY ")
+                .append(sortedType.getType())
+                .append(" ")
+                .append(order.getType());
+        return query.toString();
     }
 }

@@ -9,10 +9,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 public class AddItemToCartControllerPost extends PageController {
     public static final String URL_TO_HOME_PAGE = "/home-page";
+    public static final String URL_TO_CART = "/cart";
     private final GoodsService goodsService;
 
     public AddItemToCartControllerPost(GoodsService goodsService) {
@@ -22,7 +24,26 @@ public class AddItemToCartControllerPost extends PageController {
     @Override
     public void handle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String goodsId = req.getParameter("id");
+        String action = req.getParameter("count");
         Cart cart = SessionUtils.getCartFromRequest(req);
+
+
+        if (Objects.nonNull(action) && action.equals("up")) {
+            cart.increaseGoodsCount(Integer.parseInt(goodsId));
+            SessionUtils.saveCartToSession(req, cart);
+            resp.sendRedirect(URL_TO_CART);
+            return;
+        } else if (Objects.nonNull(action) && action.equals("down")) {
+            cart.decreaseGoodsCount(Integer.parseInt(goodsId));
+            SessionUtils.saveCartToSession(req, cart);
+            resp.sendRedirect(URL_TO_CART);
+            return;
+        } else if (Objects.nonNull(action) && action.equals("delete")) {
+            cart.deleteGoods(Integer.parseInt(goodsId));
+            SessionUtils.saveCartToSession(req, cart);
+            resp.sendRedirect(URL_TO_CART);
+            return;
+        }
         Optional<GoodsViewDTO> goodsViewDTOOptional = goodsService.getById(goodsId);
         goodsViewDTOOptional.ifPresent(cart::addToCart);
         SessionUtils.saveCartToSession(req, cart);

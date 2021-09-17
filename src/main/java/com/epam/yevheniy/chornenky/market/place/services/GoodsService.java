@@ -1,6 +1,7 @@
 package com.epam.yevheniy.chornenky.market.place.services;
 
 import com.epam.yevheniy.chornenky.market.place.exceptions.ValidationException;
+import com.epam.yevheniy.chornenky.market.place.models.SiteFilterBuilder;
 import com.epam.yevheniy.chornenky.market.place.repositories.GoodsRepository;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.CategoryEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.GoodsEntity;
@@ -35,7 +36,8 @@ public class GoodsService {
         String imageName = goodsEntity.getImageName();
         String description = goodsEntity.getDescription();
         String manufacturerName = goodsEntity.getManufacturer().getName();
-        return new GoodsViewDTO(id, model, price, categoryName, imageName, description, manufacturerName, name);
+        String created = goodsEntity.getCreated().toString();
+        return new GoodsViewDTO(id, model, price, categoryName, imageName, description, manufacturerName, name, created);
     }
 
     public void createGoods(CreateGoodsDTO createGoodsDTO) {
@@ -135,6 +137,25 @@ public class GoodsService {
     public Optional<GoodsViewDTO> getById(String goodsId) {
         Optional<GoodsEntity> goodsEntityOptional = goodsRepository.findGoodsById(goodsId);
         return goodsEntityOptional.map(this::mapToDTO);
+    }
+
+    public List<GoodsViewDTO> getSortedGoodsViewDTOList(String sort, String order, String[] categories) {
+        SiteFilterBuilder siteFilterBuilder = new SiteFilterBuilder();
+
+        siteFilterBuilder.getBuilder().setSortedType(sort);
+        siteFilterBuilder.getBuilder().setOrder(order);
+        if (Objects.nonNull(categories) && categories.length > 0) {
+            for (String category : categories) {
+                siteFilterBuilder.getBuilder().addCategory(Integer.parseInt(category));
+            }
+        } else {
+            List<CategoryDto> categoriesDtoList = getCategoriesDtoList();
+            for (CategoryDto dto: categoriesDtoList) {
+                siteFilterBuilder.getBuilder().addCategory(dto.getCategoryId());
+            }
+        }
+        SiteFilterBuilder.SiteFilter siteFilter = siteFilterBuilder.getBuilder().getSiteFilter();
+        return goodsRepository.getSortedGoodsViewDtoList(siteFilter);
     }
 }
 
