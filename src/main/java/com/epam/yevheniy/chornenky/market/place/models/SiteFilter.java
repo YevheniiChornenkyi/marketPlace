@@ -4,73 +4,70 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class SiteFilterBuilder {
+public class SiteFilter {
 
-    private final Builder builder = new Builder();
+    private List<Integer> categories = new ArrayList<>();
+    private SortedType sortedType = SortedType.ALPHABETIC;
+    private Order order = Order.ASCENDING;
 
-    public Builder getBuilder() {
-        return this.builder;
+    public List<Integer> getCategories() {
+        return categories;
     }
 
-    public static class SiteFilter {
-        private List<Integer> categories = new ArrayList<>();
-        private SortedType sortedType = SortedType.ALPHABETIC;
-        private Order order = Order.ASCENDING;
+    private void setCategories(List<Integer> categories) {
+        this.categories = categories;
+    }
 
-        public List<Integer> getCategories() {
-            return categories;
-        }
+    public SortedType getSortedType() {
+        return sortedType;
+    }
 
-        private void setCategories(List<Integer> categories) {
-            this.categories = categories;
-        }
+    private void setSortedType(SortedType sortedType) {
+        this.sortedType = sortedType;
+    }
 
-        public SortedType getSortedType() {
-            return sortedType;
-        }
+    public Order getOrder() {
+        return order;
+    }
 
-        private void setSortedType(SortedType sortedType) {
-            this.sortedType = sortedType;
-        }
+    private void setOrder(Order order) {
+        this.order = order;
+    }
 
-        public Order getOrder() {
-            return order;
-        }
-
-        private void setOrder(Order order) {
-            this.order = order;
-        }
+    public static Builder getBuilder() {
+        return new Builder();
     }
 
     public static class Builder {
 
         private final SiteFilter siteFilter = new SiteFilter();
 
-
         private Builder() {
         }
 
-        public void setSortedType(String sortedType) {
+        public Builder setSortedType(String sortedType) {
             if (Objects.nonNull(sortedType)) {
                 siteFilter.setSortedType(SortedType.valueOf(sortedType));
             }
+            return this;
         }
 
-        public void setOrder(String order) {
+        public Builder setOrder(String order) {
             if (Objects.nonNull(order)) {
                 siteFilter.setOrder(Order.valueOf(order));
             }
+            return this;
         }
 
-        public void addCategory(Integer category) {
-            siteFilter.getCategories().add(category);
+        public Builder addCategory(Integer category) {
+            siteFilter.categories.add(category);
+            return this;
         }
 
         public SiteFilter getSiteFilter() {
             return siteFilter;
         }
     }
-
 
     public enum Order {
         ASCENDING("ASC"),
@@ -81,6 +78,7 @@ public class SiteFilterBuilder {
         Order(String type) {
             this.type = type;
         }
+
         public String getType() {
             return type;
         }

@@ -42,7 +42,7 @@
                 <div class="border-bottom pb-2 ml-2">
                     <h5>Admin menu</h5>
                     <button onclick="location.href='goods'" class="cart-acc-button ">Add new product</button>
-                    <button onclick="location.href='goods'" class="cart-acc-button ">Users</button>
+                    <button onclick="location.href='users'" class="cart-acc-button ">Users</button>
                     <button onclick="location.href='goods'" class="cart-acc-button ">Orders</button>
                 </div>
             </c:if>

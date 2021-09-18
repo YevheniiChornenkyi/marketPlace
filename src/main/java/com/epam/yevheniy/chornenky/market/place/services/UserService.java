@@ -5,10 +5,9 @@ import com.epam.yevheniy.chornenky.market.place.exceptions.ValidationException;
 import com.epam.yevheniy.chornenky.market.place.repositories.UserRepository;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.UserEntity;
 import com.epam.yevheniy.chornenky.market.place.servlet.dto.UserRegistrationDTO;
+import com.epam.yevheniy.chornenky.market.place.servlet.dto.UserViewDto;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static com.epam.yevheniy.chornenky.market.place.repositories.entities.UserEntity.Role;
 
@@ -44,6 +43,30 @@ public class UserService {
     private boolean emailCheckUniqueness(String email) {
         Optional<UserEntity> optionalUserEntity = repository.findByEmail(email);
         return optionalUserEntity.isEmpty();
+    }
+
+    public List<UserViewDto> getUsersDtoList() {
+        List<UserEntity> usersEntityList = repository.getAllUsersList();
+        List<UserViewDto> userViewDtoList = new ArrayList<>();
+        for (UserEntity userEntity : usersEntityList) {
+            String id = userEntity.getId();
+            String name = userEntity.getName();
+            String surName = userEntity.getSurName();
+            Role role = userEntity.getRole();
+            String email = userEntity.getEmail();
+            boolean isActive = userEntity.getIsActive();
+            UserViewDto userViewDto = new UserViewDto(id, name, surName, role.name(), email, isActive);
+            userViewDtoList.add(userViewDto);
+        }
+        return userViewDtoList;
+    }
+
+    public void blockDispatcher(String banFlag, String userId) {
+        if (banFlag.equals("ban")) {
+            repository.banById(userId);
+        } else if (banFlag.equals("unBan")) {
+            repository.unBanById(userId);
+        }
     }
 
     public static class Authentication {

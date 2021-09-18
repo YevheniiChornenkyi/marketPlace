@@ -37,6 +37,8 @@ public class ContextInitializer {
         private final LogoutController logoutController;
         private final EditGetController editGetController;
         private final EditPOSTController editPOSTController;
+        private final UsersTableControllerGet usersTableControllerGet;
+        private final UsersTableControllerPost usersTableControllerPost;
 
         private final Map<String, PageController> pageControllers;
 
@@ -66,6 +68,8 @@ public class ContextInitializer {
             logoutController = new LogoutController();
             editGetController = new EditGetController(goodsService);
             editPOSTController = new EditPOSTController(goodsService);
+            usersTableControllerGet = new UsersTableControllerGet(userService);
+            usersTableControllerPost = new UsersTableControllerPost(userService);
 
             pageControllers = new HashMap<>();
             pageControllers.put("GET/action/login", loginPageController);
@@ -81,6 +85,8 @@ public class ContextInitializer {
             pageControllers.put("GET/action/logout", logoutController);
             pageControllers.put("GET/action/edit", editGetController);
             pageControllers.put("POST/action/edit", editPOSTController);
+            pageControllers.put("GET/action/users", usersTableControllerGet);
+            pageControllers.put("POST/action/users", usersTableControllerPost);
         }
 
         public Map<String, PageController> getPageControllers() {

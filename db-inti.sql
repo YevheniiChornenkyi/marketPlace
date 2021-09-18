@@ -27,7 +27,8 @@ CREATE TABLE users(
 );
 
 INSERT INTO users (id, name, surname, psw, role_id, email) VALUES ("1", "Yevheniy" , "Chornenkiy", "login1", "1", "evgeny.chornenky@gmail.com" );
-INSERT INTO users (id, name, surname, psw, role_id, email, is_active) VALUES ("2", "Boris" , "Razor", "login1", "2", "boris@gmail.com", 0);
+INSERT INTO users (id, name, surname, psw, role_id, email, is_active) VALUES ("2", "Boris" , "Britva", "login1", "2", "boris@gmail.com", 0);
+INSERT INTO users (id, name, surname, psw, role_id, email, is_active) VALUES ("3", "Anton" , "Baton", "login1", "2", "anton@gmail.com", 1);
 
 CREATE TABLE categories (
      id INT NOT NULL AUTO_INCREMENT,
@@ -82,3 +83,48 @@ CREATE TABLE images (
 );
 
 INSERT INTO images (image_id) VALUES ("axe.jpg");
+
+CREATE TABLE statuses (
+    status VARCHAR(20),
+
+    PRIMARY KEY (status)
+);
+
+INSERT INTO statuses (status) VALUES ("unconfirmed");
+INSERT INTO statuses (status) VALUES ("awaiting delivery");
+INSERT INTO statuses (status) VALUES ("awaiting pickup");
+INSERT INTO statuses (status) VALUES ("canceled");
+
+CREATE TABLE orders (
+    order_id INT NOT NULL AUTO_INCREMENT,
+    user_id VARCHAR(36) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    address VARCHAR(40) NOT NULL,
+    price VARCHAR(20) NOT NULL,
+
+    PRIMARY KEY (order_id),
+        FOREIGN KEY (user_id)
+            REFERENCES users(id)
+            ON DELETE CASCADE,
+        FOREIGN KEY (status)
+            REFERENCES statuses(status)
+            ON DELETE CASCADE
+);
+
+INSERT INTO orders (order_id, user_id, status, address, price) VALUES ("1", "3", "unconfirmed", "bread factory", "999");
+
+CREATE TABLE order_item (
+    parent_order_id INT NOT NULL,
+    goods_id INT NOT NULL,
+    quantity INT NOT NULL,
+    price VARCHAR(20) NOT NULL,
+    total_price VARCHAR(20) NOT NULL,
+        FOREIGN KEY (parent_order_id)
+            REFERENCES orders(order_id)
+            ON DELETE CASCADE
+);
+
+INSERT INTO order_item (parent_order_id, goods_id, quantity, price, total_price) VALUES ("1", "1", "2", "999", "1998");
+
+
+

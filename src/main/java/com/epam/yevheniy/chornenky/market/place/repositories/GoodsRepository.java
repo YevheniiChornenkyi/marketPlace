@@ -2,7 +2,7 @@ package com.epam.yevheniy.chornenky.market.place.repositories;
 
 import com.epam.yevheniy.chornenky.market.place.db.ConnectionManager;
 import com.epam.yevheniy.chornenky.market.place.exceptions.DBException;
-import com.epam.yevheniy.chornenky.market.place.models.SiteFilterBuilder;
+import com.epam.yevheniy.chornenky.market.place.models.SiteFilter;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.CategoryEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.GoodsEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.ManufacturerEntity;
@@ -221,7 +221,7 @@ public class GoodsRepository {
         }
     }
 
-    public List<GoodsViewDTO> getSortedGoodsViewDtoList(SiteFilterBuilder.SiteFilter siteFilter) {
+    public List<GoodsViewDTO> getSortedGoodsViewDtoList(SiteFilter siteFilter) {
         try(Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(querySortedGoodsViewDtoList(siteFilter));
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -246,10 +246,10 @@ public class GoodsRepository {
         }
     }
 
-    private String querySortedGoodsViewDtoList(SiteFilterBuilder.SiteFilter siteFilter) {
+    private String querySortedGoodsViewDtoList(SiteFilter siteFilter) {
         List<Integer> categories = siteFilter.getCategories();
-        SiteFilterBuilder.SortedType sortedType = siteFilter.getSortedType();
-        SiteFilterBuilder.Order order = siteFilter.getOrder();
+        SiteFilter.SortedType sortedType = siteFilter.getSortedType();
+        SiteFilter.Order order = siteFilter.getOrder();
 
         StringBuilder query = new StringBuilder(TEMPLATE_SORTED_GOODS_QUERY);
         if (categories.size() != 0) {

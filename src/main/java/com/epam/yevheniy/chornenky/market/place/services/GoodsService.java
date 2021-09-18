@@ -1,7 +1,7 @@
 package com.epam.yevheniy.chornenky.market.place.services;
 
 import com.epam.yevheniy.chornenky.market.place.exceptions.ValidationException;
-import com.epam.yevheniy.chornenky.market.place.models.SiteFilterBuilder;
+import com.epam.yevheniy.chornenky.market.place.models.SiteFilter;
 import com.epam.yevheniy.chornenky.market.place.repositories.GoodsRepository;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.CategoryEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.GoodsEntity;
@@ -140,21 +140,22 @@ public class GoodsService {
     }
 
     public List<GoodsViewDTO> getSortedGoodsViewDTOList(String sort, String order, String[] categories) {
-        SiteFilterBuilder siteFilterBuilder = new SiteFilterBuilder();
+        SiteFilter.Builder siteFilterBuilder = SiteFilter.getBuilder();
+        siteFilterBuilder
+                .setSortedType(sort)
+                .setOrder(order);
 
-        siteFilterBuilder.getBuilder().setSortedType(sort);
-        siteFilterBuilder.getBuilder().setOrder(order);
         if (Objects.nonNull(categories) && categories.length > 0) {
             for (String category : categories) {
-                siteFilterBuilder.getBuilder().addCategory(Integer.parseInt(category));
+                siteFilterBuilder.addCategory(Integer.parseInt(category));
             }
         } else {
             List<CategoryDto> categoriesDtoList = getCategoriesDtoList();
-            for (CategoryDto dto: categoriesDtoList) {
-                siteFilterBuilder.getBuilder().addCategory(dto.getCategoryId());
+            for (CategoryDto dto : categoriesDtoList) {
+                siteFilterBuilder.addCategory(dto.getCategoryId());
             }
         }
-        SiteFilterBuilder.SiteFilter siteFilter = siteFilterBuilder.getBuilder().getSiteFilter();
+        SiteFilter siteFilter = siteFilterBuilder.getSiteFilter();
         return goodsRepository.getSortedGoodsViewDtoList(siteFilter);
     }
 }
