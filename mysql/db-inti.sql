@@ -74,8 +74,21 @@ CREATE TABLE goods (
             ON DELETE CASCADE
 );
 
-INSERT INTO goods (name, price, category, description, manufacturer) VALUES ("Britva", "1000", "1", "Britva", "1");
-INSERT INTO goods (name, price, category, image_name, description, manufacturer) VALUES ("Axe", "100500", "2", "axe.png", "Axe", "2");
+INSERT INTO goods (name, price, model, category, image_name, description, manufacturer) VALUES ("Perforator", "2000", "RH-100Q", "1", "perforator.jpg", "Perforator straight Dnepr-M RH-100Q", "1");
+INSERT INTO goods (name, price, model, category, image_name, description, manufacturer) VALUES ("Grinder", "1250", "GL-125S", "1", "grinder.jpg", "Angle grinder Dnipro-M GL-125S", "1");
+INSERT INTO goods (name, price, model, category, image_name, description, manufacturer) VALUES ("Screwdriver", "2450", "SD-55A", "1", "screwdriver.png", "Cordless screwdriver Dnipro-M SD-55A", "1");
+INSERT INTO goods (name, price, model, category, image_name, description, manufacturer) VALUES ("Cordless blower", "990", "DCB-200", "2", "cordless_blower.jpg", "Dnipro-M DCB-200 cordless blower (without battery and charger)", "1");
+INSERT INTO goods (name, price, model, category, image_name, description, manufacturer) VALUES ("Cordless impact driver", "1200", "DTD-200", "2", "Cordless_impact_driver.jpg", "Cordless impact driver Dnipro-M DTD-200 (without battery and charger)", "1");
+INSERT INTO goods (name, price, model, category, image_name, description, manufacturer) VALUES ("Dual cordless chain saw", "5500", "DCS-200BC", "2", "Dual_cordless_chain_saw.jpg", "Dnipro-M DCS-200BC Dual cordless chain saw (without battery and charger)", "1");
+INSERT INTO goods (name, price, model, category, image_name, description, manufacturer) VALUES ("Stepladder", "1500", "LT-0056", "3", "intertool-lt-0056-original-wm.jpg", "Stepladder 6 steps, top step height 1280mm, 481х1138х1787mm, 150kg INTERTOOL LT-0056", "5");
+INSERT INTO goods (name, price, model, category, image_name, description, manufacturer) VALUES ("Stepladder", "990", "LT-0037", "3", "Stepladder_3_steps.jpg", "Stepladder 3 steps 380 * 260mm height 1131mm, up to the top step 729mm INTERTOOL LT-0037", "5");
+INSERT INTO goods (name, price, model, category, image_name, description, manufacturer) VALUES ("Ladder platform", "3500", "LT-0027", "3", "Ladder_platform.jpg", "Ladder platform (2x6) INTERTOOL LT-0027", "5");
+INSERT INTO goods (name, price, model, category, image_name, description, manufacturer) VALUES ("Saw", "409", "W-330-LH", "4", "W-330-LH-500x500.jpg", "Saw with curved blade in a cover (L = 330 mm / 4 mm) (Samurai W-330-LH)", "2");
+INSERT INTO goods (name, price, model, category, image_name, description, manufacturer) VALUES ("Saw", "500", "P-CH350-LH", "4", "P-CH350-LH-500x500.jpg", "Saw with curved blade and hanger, L = 350mm / 4mm / 1.2mm (Samurai P-CH350-LH)", "2");
+INSERT INTO goods (name, price, model, category, image_name, description, manufacturer) VALUES ("Saw", "650", "GCM-270-MH", "4", "GCM-210-MH-500x500.jpg", "Saw with curved blade in a case (Samurai GCM-270-MH)", "2");
+INSERT INTO goods (name, price, category, image_name, description, manufacturer) VALUES ("Metal drill bits", "290", "5", "2608577347.jpg", "Metal drill bits Bosch HSS PointTeQ 2-10 mm, Mini-X-Line 7 pcs.", "4");
+INSERT INTO goods (name, price, category, image_name, description, manufacturer) VALUES ("Flap disc", "55", "5", "2608603657.jpg", "Flap disc Bosch Standard for Metal X431, 125х22.23 mm, 80", "4");
+INSERT INTO goods (name, price, category, image_name, description, manufacturer) VALUES ("Plastic case", "55", "5", "2608522363.jpg", "Bosch Pick and Click Plastic Carrying Case, Size L", "4");
 
 CREATE TABLE images (
     image_id VARCHAR(40) NOT NULL,

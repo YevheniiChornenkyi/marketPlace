@@ -62,8 +62,8 @@
 
                     <section class="range-slider" name="slideBar">
                       <span class="rangeValues"></span>
-                      <input value="0" min="0" max="100500" step="10" type="range" name="minPrice">
-                      <input value="100500" min="0" max="100500" step="10" type="range" name="maxPrice">
+                      <input value="0" min="0" max="10000" step="50" type="range" name="minPrice">
+                      <input value="100500" min="0" max="10000" step="50" type="range" name="maxPrice">
                     </section>
 
                     <h5>Categories</h5>
