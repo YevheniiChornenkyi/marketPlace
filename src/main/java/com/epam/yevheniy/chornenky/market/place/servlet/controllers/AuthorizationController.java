@@ -30,6 +30,7 @@ public class AuthorizationController extends PageController {
         HttpSession session = req.getSession();
         try {
             UserService.Authentication authentication = userService.authenticate(email, psw);
+            isActive(authentication);
             session.setAttribute("authentication", authentication);
             resp.sendRedirect(URL_HOME_PAGE);
         } catch (ValidationException e ) {
@@ -40,5 +41,12 @@ public class AuthorizationController extends PageController {
             resp.sendRedirect(URL_TO_LOGIN);
         }
     }
+
+    private void isActive(UserService.Authentication authentication) {
+        if (authentication.getRole().getId().equals("3")) {
+            throw new ValidationException(Map.of("activation", "false"));
+        }
+    }
+
 }
 

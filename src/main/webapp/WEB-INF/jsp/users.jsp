@@ -36,14 +36,14 @@
                                         </div>
                                         <c:choose>
                                             <c:when test="${item.getIsActive() eq 'true'}">
-                                                <form action="users" method="post">
+                                                <form action="/action/users" method="post">
                                                    <input type="hidden" value="ban" name="is_active">
                                                    <input type="hidden" value="${item.getId()}" name="userId">
                                                    <button type="submit" class="button_ban">BLOCK</button>
                                                 </form>
                                             </c:when>
                                             <c:otherwise>
-                                                <form action="users" method="post">
+                                                <form action="/action/users" method="post">
                                                    <input type="hidden" value="unBan" name="is_active">
                                                    <input type="hidden" value="${item.getId()}" name="userId">
                                                    <button type="submit" class="button_ban">UNBLOCK</button>

@@ -1,17 +1,24 @@
 package com.epam.yevheniy.chornenky.market.place.services;
 
 import com.epam.yevheniy.chornenky.market.place.exceptions.ValidationException;
+import com.epam.yevheniy.chornenky.market.place.models.Cart;
 import com.epam.yevheniy.chornenky.market.place.models.SiteFilter;
 import com.epam.yevheniy.chornenky.market.place.repositories.GoodsRepository;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.CategoryEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.GoodsEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.ManufacturerEntity;
+import com.epam.yevheniy.chornenky.market.place.repositories.entities.OrderEntity;
 import com.epam.yevheniy.chornenky.market.place.servlet.dto.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class GoodsService {
+
+    private static final Logger LOGGER = LogManager.getLogger(GoodsService.class);
 
     private final GoodsRepository goodsRepository;
     private final ImageService imageService;
@@ -139,14 +146,16 @@ public class GoodsService {
         return goodsEntityOptional.map(this::mapToDTO);
     }
 
-    public List<GoodsViewDTO> getSortedGoodsViewDTOList(String sort, String order, String[] categories) {
+    public List<GoodsViewDTO> getSortedGoodsViewDTOList(CreateSiteFilterDTO createSiteFilterDTO) {
         SiteFilter.Builder siteFilterBuilder = SiteFilter.getBuilder();
         siteFilterBuilder
-                .setSortedType(sort)
-                .setOrder(order);
+                .setSortedType(createSiteFilterDTO.getSort())
+                .setOrder(createSiteFilterDTO.getOrder())
+                .setMinPrice(createSiteFilterDTO.getMinPrice())
+                .setMaxPrice(createSiteFilterDTO.getMaxPrice());
 
-        if (Objects.nonNull(categories) && categories.length > 0) {
-            for (String category : categories) {
+        if (Objects.nonNull(createSiteFilterDTO.getCategories()) && createSiteFilterDTO.getCategories().length > 0) {
+            for (String category : createSiteFilterDTO.getCategories()) {
                 siteFilterBuilder.addCategory(Integer.parseInt(category));
             }
         } else {

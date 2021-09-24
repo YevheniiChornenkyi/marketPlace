@@ -14,7 +14,7 @@
                 <button onclick="location.href='home-page'" class="registerbtn">Back to marketplace</button>
             </div>
         </c:if>
-            <form action="/goods" method="POST" enctype="multipart/form-data">
+            <form action="/action/goods" method="POST" enctype="multipart/form-data">
                 <div class="container">
                     <h1>Adding goods</h1>
                     <p>Please fill in this form to add new goods.</p>

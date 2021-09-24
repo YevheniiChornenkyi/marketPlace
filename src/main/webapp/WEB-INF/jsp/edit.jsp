@@ -9,7 +9,7 @@
     <body>
         <c:choose>
             <c:when test="${empty param.created}">
-                <form action="/edit" method="POST" enctype="multipart/form-data">
+                <form action="/action/edit" method="POST" enctype="multipart/form-data">
                     <div class="container">
 
                         <h1>Editing</h1>

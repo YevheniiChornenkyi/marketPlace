@@ -1,6 +1,7 @@
 package com.epam.yevheniy.chornenky.market.place.repositories;
 
 import com.epam.yevheniy.chornenky.market.place.db.ConnectionManager;
+import com.epam.yevheniy.chornenky.market.place.exceptions.ActivationException;
 import com.epam.yevheniy.chornenky.market.place.exceptions.DBException;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.UserEntity;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.epam.yevheniy.chornenky.market.place.repositories.entities.UserEntity.*;
 
@@ -23,6 +25,9 @@ public class UserRepository {
     private static final String CREATE_NEW_USER_QUERY = "INSERT INTO users (id, name, surname, psw, role_id, email) VALUE (?, ?, ?, ?, ?, ?)";
     public static final String GET_ALL_USERS_QUERY = "SELECT users.id, users.name, users.surname, users.psw, roles.role_name, users.email, users.is_active FROM users LEFT JOIN roles ON users.role_id=roles.id";
     public static final String UPDATE_USER_IS_ACTIVE_COLUMN_QUERY = "UPDATE users SET users.is_active=? WHERE users.id=?";
+    public static final String SELECT_ACIVATION_COD_BY_ID_QUERY = "SELECT activation_cods.user_id FROM activation_cods WHERE activation_cods.activation_cod=?";
+    public static final String UPDATE_USER_ROLE_QUERY = "UPDATE users SET users.role_id=2 WHERE users.id=?";
+    public static final String INSERT_ACTIVATION_CODE_QUERY = "INSERT INTO activation_cods (user_id, activation_cod) VALUES (?, ?)";
 
 
     private final ConnectionManager connectionManager;
@@ -117,6 +122,42 @@ public class UserRepository {
             LOGGER.error("Cant find user, or query mistake", e);
             throw new DBException();
         }
+    }
+
+    public String createUserActivationLink(String id) {
+        String key = UUID.randomUUID().toString();
+        try(Connection connection = connectionManager.getConnection()) {
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement(INSERT_ACTIVATION_CODE_QUERY);
+            preparedStatement.setString(1, id);
+            preparedStatement.setString(2, key);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.error("Cant generate activation key");
+            throw new DBException();
+        }
+        return key;
+    }
+
+    public void activateUser(String key) {
+        try(Connection connection = connectionManager.getConnection()) {
+            String userId = getUserIdFromActivationCodsByKey(key, connection);
+
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_ROLE_QUERY);
+            preparedStatement.setString(1, userId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.error("Fail user activation", e);
+            throw new ActivationException();
+        }
+    }
+
+    private String getUserIdFromActivationCodsByKey(String key, Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ACIVATION_COD_BY_ID_QUERY);
+        preparedStatement.setString(1, key);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+        return resultSet.getString("user_id");
     }
 }
 

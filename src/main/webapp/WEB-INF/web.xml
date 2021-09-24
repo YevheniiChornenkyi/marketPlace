@@ -34,6 +34,22 @@
             <param-name>iconHomeDirectoryPath</param-name>
             <param-value>D:/marketPlaceImages/</param-value>
         </init-param>
+        <init-param>
+            <param-name>marketEmail</param-name>
+            <param-value>market.place.toolz</param-value>
+        </init-param>
+        <init-param>
+            <param-name>marketEmailPass</param-name>
+            <param-value>market@place</param-value>
+        </init-param>
+        <init-param>
+            <param-name>smtpHost</param-name>
+            <param-value>smtp.gmail.com</param-value>
+        </init-param>
+        <init-param>
+            <param-name>hostPort</param-name>
+            <param-value>587</param-value>
+        </init-param>
 
         <multipart-config>
             <max-file-size>10485760</max-file-size>
@@ -48,6 +64,60 @@
     </servlet-mapping>
 
     <filter>
+        <filter-name>security-filter</filter-name>
+        <filter-class>com.epam.yevheniy.chornenky.market.place.filters.SecurityFilter</filter-class>
+
+        <init-param>
+            <param-name>GET/action/goods</param-name>
+            <param-value>ADMIN</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>POST/action/goods</param-name>
+            <param-value>ADMIN</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>GET/action/logout</param-name>
+            <param-value>ADMIN CUSTOMER</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>GET/action/edit</param-name>
+            <param-value>ADMIN</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>POST/action/edit</param-name>
+            <param-value>ADMIN</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>GET/action/users</param-name>
+            <param-value>ADMIN</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>POST/action/users</param-name>
+            <param-value>ADMIN</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>POST/action/orders</param-name>
+            <param-value>ADMIN CUSTOMER</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>GET/action/orders</param-name>
+            <param-value>ADMIN CUSTOMER</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>security-filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
         <filter-name>path-filter</filter-name>
         <filter-class>com.epam.yevheniy.chornenky.market.place.filters.PathFilter</filter-class>
     </filter>
@@ -57,12 +127,12 @@
     </filter-mapping>
 
     <filter>
-        <filter-name>encoding_filter</filter-name>
-        <filter-class>com.epam.yevheniy.chornenky.market.place.filters.EncodingFilter</filter-class>
+        <filter-name>lang-filter</filter-name>
+        <filter-class>com.epam.yevheniy.chornenky.market.place.filters.LangFilter</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>encoding_filter</filter-name>
-        <url-pattern>/sfthgg</url-pattern>
+        <filter-name>lang-filter</filter-name>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
 
     <error-page>

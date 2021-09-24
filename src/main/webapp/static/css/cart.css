@@ -206,3 +206,13 @@ ul {
     width: 100%;
     opacity: 0.9;
 }
+.container {
+    padding: 16px;
+    background-color: white;
+}
+.green-text {
+    color: green;
+    font-size: larger;
+    padding-left: 10px;
+}
+

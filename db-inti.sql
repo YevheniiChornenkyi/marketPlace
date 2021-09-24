@@ -11,6 +11,7 @@ CREATE TABLE roles(
 
 INSERT INTO roles (id, role_name) VALUES ("1", "ADMIN");
 INSERT INTO roles (id, role_name) VALUES ("2", "CUSTOMER");
+INSERT INTO roles (id, role_name) VALUES ("3", "NOT_ACTIVATE");
 
 CREATE TABLE users(
     id VARCHAR(36) NOT NULL,
@@ -85,21 +86,23 @@ CREATE TABLE images (
 INSERT INTO images (image_id) VALUES ("axe.jpg");
 
 CREATE TABLE statuses (
-    status VARCHAR(20),
+    status VARCHAR(20) NOT NULL,
 
     PRIMARY KEY (status)
 );
 
-INSERT INTO statuses (status) VALUES ("unconfirmed");
-INSERT INTO statuses (status) VALUES ("awaiting delivery");
-INSERT INTO statuses (status) VALUES ("awaiting pickup");
-INSERT INTO statuses (status) VALUES ("canceled");
+INSERT INTO statuses (status) VALUES ("UNCONFIRMED");
+INSERT INTO statuses (status) VALUES ("PROCESSED");
+INSERT INTO statuses (status) VALUES ("AWAITING_DELIVERY");
+INSERT INTO statuses (status) VALUES ("AWAITING_PICKUP");
+INSERT INTO statuses (status) VALUES ("CANCELED");
 
 CREATE TABLE orders (
-    order_id INT NOT NULL AUTO_INCREMENT,
+    order_id VARCHAR(40) NOT NULL,
     user_id VARCHAR(36) NOT NULL,
     status VARCHAR(20) NOT NULL,
     address VARCHAR(40) NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
     price VARCHAR(20) NOT NULL,
 
     PRIMARY KEY (order_id),
@@ -111,20 +114,36 @@ CREATE TABLE orders (
             ON DELETE CASCADE
 );
 
-INSERT INTO orders (order_id, user_id, status, address, price) VALUES ("1", "3", "unconfirmed", "bread factory", "999");
+INSERT INTO orders (order_id, user_id, status, address, phone_number, price) VALUES ("1", "3", "PROCESSED", "bread factory","88004004455", "1998");
+INSERT INTO orders (order_id, user_id, status, address, phone_number, price) VALUES ("2", "3", "PROCESSED", "Feanor street 29","88004004455", "2666");
 
 CREATE TABLE order_item (
-    parent_order_id INT NOT NULL,
+    order_item_id VARCHAR(60) NOT NULL,
+    parent_order_id VARCHAR(40) NOT NULL,
     goods_id INT NOT NULL,
     quantity INT NOT NULL,
     price VARCHAR(20) NOT NULL,
     total_price VARCHAR(20) NOT NULL,
+
+    PRIMARY KEY (order_item_id),
         FOREIGN KEY (parent_order_id)
             REFERENCES orders(order_id)
+            ON DELETE CASCADE,
+        FOREIGN KEY (goods_id)
+            REFERENCES goods(id)
             ON DELETE CASCADE
 );
 
-INSERT INTO order_item (parent_order_id, goods_id, quantity, price, total_price) VALUES ("1", "1", "2", "999", "1998");
+INSERT INTO order_item (order_item_id, parent_order_id, goods_id, quantity, price, total_price) VALUES ("11", "1", "1", "2", "999", "1998");
+INSERT INTO order_item (order_item_id, parent_order_id, goods_id, quantity, price, total_price) VALUES ("21", "2", "1", "2", "333", "666");
+INSERT INTO order_item (order_item_id, parent_order_id, goods_id, quantity, price, total_price) VALUES ("22", "2", "2", "2", "1000", "2000");
 
+CREATE TABLE activation_cods (
+    user_id VARCHAR(40) NOT NULL,
+    activation_cod VARCHAR(40) NOT NULL,
 
-
+    PRIMARY KEY (user_id),
+        FOREIGN KEY (user_id)
+            REFERENCES users(id)
+            ON DELETE CASCADE
+);

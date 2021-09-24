@@ -2,10 +2,9 @@ package com.epam.yevheniy.chornenky.market.place;
 
 import com.epam.yevheniy.chornenky.market.place.db.ConnectionManager;
 import com.epam.yevheniy.chornenky.market.place.repositories.GoodsRepository;
+import com.epam.yevheniy.chornenky.market.place.repositories.OrderRepository;
 import com.epam.yevheniy.chornenky.market.place.repositories.UserRepository;
-import com.epam.yevheniy.chornenky.market.place.services.GoodsService;
-import com.epam.yevheniy.chornenky.market.place.services.ImageService;
-import com.epam.yevheniy.chornenky.market.place.services.UserService;
+import com.epam.yevheniy.chornenky.market.place.services.*;
 import com.epam.yevheniy.chornenky.market.place.servlet.controllers.*;
 
 import javax.servlet.ServletConfig;
@@ -39,6 +38,10 @@ public class ContextInitializer {
         private final EditPOSTController editPOSTController;
         private final UsersTableControllerGet usersTableControllerGet;
         private final UsersTableControllerPost usersTableControllerPost;
+        private final OrdersControllerPost ordersControllerPost;
+        private final EmptyCartController emptyCartController;
+        private final OrdersControllerGet ordersControllerGet;
+        private final ActivationController activationController;
 
         private final Map<String, PageController> pageControllers;
 
@@ -49,10 +52,16 @@ public class ContextInitializer {
 
             UserRepository userRepository = new UserRepository(connectionManager);
             GoodsRepository goodsRepository = new GoodsRepository(connectionManager);
+            OrderRepository orderRepository = new OrderRepository(connectionManager);
 
             ImageService imageService = new ImageService(servletConfig.getInitParameter("iconHomeDirectoryPath"));
-            UserService userService = new UserService(userRepository);
+            EmailService emailService = new EmailService(servletConfig.getInitParameter("marketEmail"),
+                    servletConfig.getInitParameter("marketEmailPass"),
+                    servletConfig.getInitParameter("smtpHost"),
+                    servletConfig.getInitParameter("hostPort"));
+            UserService userService = new UserService(userRepository, emailService);
             GoodsService goodsService = new GoodsService(goodsRepository, imageService);
+            OrderService orderService = new OrderService(orderRepository);
 
             authorizationController = new AuthorizationController(userService);
             homePageController = new HomePageController(goodsService);
@@ -70,6 +79,10 @@ public class ContextInitializer {
             editPOSTController = new EditPOSTController(goodsService);
             usersTableControllerGet = new UsersTableControllerGet(userService);
             usersTableControllerPost = new UsersTableControllerPost(userService);
+            ordersControllerPost = new OrdersControllerPost(orderService);
+            emptyCartController = new EmptyCartController();
+            ordersControllerGet = new OrdersControllerGet(orderService);
+            activationController = new ActivationController(userService);
 
             pageControllers = new HashMap<>();
             pageControllers.put("GET/action/login", loginPageController);
@@ -87,6 +100,10 @@ public class ContextInitializer {
             pageControllers.put("POST/action/edit", editPOSTController);
             pageControllers.put("GET/action/users", usersTableControllerGet);
             pageControllers.put("POST/action/users", usersTableControllerPost);
+            pageControllers.put("POST/action/orders", ordersControllerPost);
+            pageControllers.put("GET/action/empty-cart", emptyCartController);
+            pageControllers.put("GET/action/orders", ordersControllerGet);
+            pageControllers.put("GET/action/activation", activationController);
         }
 
         public Map<String, PageController> getPageControllers() {

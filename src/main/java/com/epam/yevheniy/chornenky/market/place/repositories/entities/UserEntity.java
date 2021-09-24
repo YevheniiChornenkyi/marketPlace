@@ -55,7 +55,7 @@ public class UserEntity {
     }
 
     public enum Role {
-        ADMIN("1"), CUSTOMER("2");
+        ADMIN("1"), CUSTOMER("2"), NOT_ACTIVATE("3");
 
         private final String id;
 

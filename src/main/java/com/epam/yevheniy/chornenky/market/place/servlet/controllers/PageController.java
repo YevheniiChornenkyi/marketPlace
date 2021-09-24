@@ -15,7 +15,7 @@ public abstract class PageController {
 
     abstract protected void handle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException;
 
-    public void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public final void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         before(req, resp);
         handle(req, resp);
         after(req, resp);

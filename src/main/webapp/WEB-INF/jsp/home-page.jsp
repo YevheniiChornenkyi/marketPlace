@@ -3,6 +3,7 @@
     <head>
         <link href="/static/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <link href="/static/css/homepage.css" rel="stylesheet">
+        <script src="/static/js/slideBar.js"></script>
     </head>
 
     <body>
@@ -16,6 +17,8 @@
                                 Register, or log in if you already have an account</h6></div>
                                 <button onclick="location.href='login'" class="log-reg-button">LOGIN</button>
                                 <button onclick="location.href='registration'" class="log-reg-button">REGISTER</button>
+
+
                             </div>
                         </c:when>
                         <c:otherwise>
@@ -23,7 +26,7 @@
                                 <div><h6>Welcome ${authentication.getName()} ${authentication.getSurName()}.</h6></div>
                                 <div style="display:inline-block;white-space:nowrap;">
                                 <button onclick="location.href='logout'" class="cart-acc-button">LOGOUT</button>
-                                <button onclick="location.href='registration'" class="cart-acc-button ">My account</button>
+                                <button onclick="location.href='orders'" class="cart-acc-button ">My orders</button>
                                 </div>
                             </div>
                         </c:otherwise>
@@ -33,6 +36,8 @@
                 <a href="/cart" >
                     <img src="/static/icons/cart.png" alt="add to cart" class="make-right">
                 </a>
+                <button onclick="location.href='home-page?lang=ru'" class="button-lang">RU</button>
+                <button onclick="location.href='home-page?lang=en'" class="button-lang">EN</button>
         </nav>
 
 <!-- Sidebar filter section -->
@@ -43,17 +48,25 @@
                     <h5>Admin menu</h5>
                     <button onclick="location.href='goods'" class="cart-acc-button ">Add new product</button>
                     <button onclick="location.href='users'" class="cart-acc-button ">Users</button>
-                    <button onclick="location.href='goods'" class="cart-acc-button ">Orders</button>
+                    <button onclick="location.href='orders'" class="cart-acc-button ">Orders</button>
                 </div>
             </c:if>
 
             <div class="border-bottom pb-2 ml-2">
                 <h4>Filters</h4>
             </div>
-            <div class="py-2 border-bottom ml-3">
-                <h5>Categories</h5>
-                <form action="/home-page" method="GET">
 
+            <div class="py-2 border-bottom ml-3">
+                <form action="/home-page" method="GET">
+                    <h5>Price</h5>
+
+                    <section class="range-slider" name="slideBar">
+                      <span class="rangeValues"></span>
+                      <input value="0" min="0" max="100500" step="10" type="range" name="minPrice">
+                      <input value="100500" min="0" max="100500" step="10" type="range" name="maxPrice">
+                    </section>
+
+                    <h5>Categories</h5>
                     <c:forEach var="item" items="${categoriesList}">
                         <input type="checkbox" name="categories" value="${item.getCategoryId()}">${item.getCategoryName()}<BR>
                     </c:forEach>
@@ -105,7 +118,7 @@
                                             </form>
                                         </c:when>
                                         <c:otherwise>
-                                            <form action="/home-page" method="POST" id="add-to-cart">
+                                            <form action="/action/home-page" method="POST" id="add-to-cart">
                                                 <input type="hidden" name="id" value="${item.getId()}" required>
                                                 <div class="add">
                                                 <input class="add" type="image" name="submit"

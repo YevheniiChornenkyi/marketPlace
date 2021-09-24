@@ -2,10 +2,13 @@ package com.epam.yevheniy.chornenky.market.place.repositories;
 
 import com.epam.yevheniy.chornenky.market.place.db.ConnectionManager;
 import com.epam.yevheniy.chornenky.market.place.exceptions.DBException;
+import com.epam.yevheniy.chornenky.market.place.exceptions.OrderException;
+import com.epam.yevheniy.chornenky.market.place.models.Cart;
 import com.epam.yevheniy.chornenky.market.place.models.SiteFilter;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.CategoryEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.GoodsEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.ManufacturerEntity;
+import com.epam.yevheniy.chornenky.market.place.repositories.entities.OrderEntity;
 import com.epam.yevheniy.chornenky.market.place.servlet.dto.GoodsViewDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -250,16 +253,28 @@ public class GoodsRepository {
         List<Integer> categories = siteFilter.getCategories();
         SiteFilter.SortedType sortedType = siteFilter.getSortedType();
         SiteFilter.Order order = siteFilter.getOrder();
+        String maxPrice = siteFilter.getMaxPrice().equals("") ? "(SELECT MAX(goods.price))" : siteFilter.getMaxPrice() + " ";
 
         StringBuilder query = new StringBuilder(TEMPLATE_SORTED_GOODS_QUERY);
         if (categories.size() != 0) {
-            query.append("WHERE");
+            query.append("WHERE (");
             for (Integer category : categories) {
                 query.append(" goods.category=")
                         .append(category)
                         .append(" OR");
             }
-            query.delete(query.length() - 2, query.length());
+            query
+                    .delete(query.length() - 2, query.length())
+                    .append(")");
+        }
+
+        if (categories.size() != 0) {
+            query
+                    .append("AND (upper(price) between ")
+                    .append(siteFilter.getMinPrice())
+                    .append(" and ")
+                    .append(maxPrice)
+                    .append(") ");
         }
         query
                 .append("ORDER BY ")

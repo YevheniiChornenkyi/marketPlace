@@ -13,9 +13,11 @@ import static com.epam.yevheniy.chornenky.market.place.repositories.entities.Use
 
 public class UserService {
     private final UserRepository repository;
+    private final EmailService emailService;
 
-    public UserService(UserRepository repository) {
+    public UserService(UserRepository repository, EmailService emailService) {
         this.repository = repository;
+        this.emailService = emailService;
     }
 
     public Authentication authenticate(String email, String psw) {
@@ -36,13 +38,19 @@ public class UserService {
         }
         String id = UUID.randomUUID().toString();
         UserEntity user = new UserEntity(userRegistrationDTO.getName(), userRegistrationDTO.getSurName(),
-                userRegistrationDTO.getPsw(), userRegistrationDTO.getEmail(), id, Role.CUSTOMER);
+                userRegistrationDTO.getPsw(), userRegistrationDTO.getEmail(), id, Role.NOT_ACTIVATE);
         repository.createUser(user);
+        String userActivationLink = repository.createUserActivationLink(id);
+        emailService.sendEmail(user.getEmail(), "Activation", getEmailBodyForActivationLatter(userActivationLink));
     }
 
     private boolean emailCheckUniqueness(String email) {
         Optional<UserEntity> optionalUserEntity = repository.findByEmail(email);
         return optionalUserEntity.isEmpty();
+    }
+
+    private String getEmailBodyForActivationLatter(String activationKey) {
+        return String.format("Dear customer go to next link http://localhost/activation?key=%s to activate you account", activationKey);
     }
 
     public List<UserViewDto> getUsersDtoList() {
@@ -67,6 +75,10 @@ public class UserService {
         } else if (banFlag.equals("unBan")) {
             repository.unBanById(userId);
         }
+    }
+
+    public void activateUser(String key) {
+        repository.activateUser(key);
     }
 
     public static class Authentication {

@@ -3,12 +3,15 @@ package com.epam.yevheniy.chornenky.market.place.models;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class SiteFilter {
 
     private List<Integer> categories = new ArrayList<>();
     private SortedType sortedType = SortedType.ALPHABETIC;
     private Order order = Order.ASCENDING;
+    private String minPrice = "";
+    private String maxPrice = "";
 
     public List<Integer> getCategories() {
         return categories;
@@ -38,6 +41,22 @@ public class SiteFilter {
         return new Builder();
     }
 
+    public String getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(String minPrice) {
+        this.minPrice = minPrice;
+    }
+
+    public String getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(String maxPrice) {
+        this.maxPrice = maxPrice;
+    }
+
     public static class Builder {
 
         private final SiteFilter siteFilter = new SiteFilter();
@@ -61,6 +80,16 @@ public class SiteFilter {
 
         public Builder addCategory(Integer category) {
             siteFilter.categories.add(category);
+            return this;
+        }
+
+        public Builder setMinPrice(String minPrice) {
+            siteFilter.setMinPrice(minPrice);
+            return this;
+        }
+
+        public Builder setMaxPrice(String maxPrice) {
+            siteFilter.setMaxPrice(maxPrice);
             return this;
         }
 

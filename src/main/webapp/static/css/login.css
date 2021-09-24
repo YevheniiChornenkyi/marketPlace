@@ -66,3 +66,8 @@ a {
     font-size: small;
     padding-left: 10px;
 }
+.green-text {
+    color: green;
+    font-size: larger;
+    padding-left: 10px;
+}

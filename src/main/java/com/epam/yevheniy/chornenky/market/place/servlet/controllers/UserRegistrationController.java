@@ -33,7 +33,7 @@ public class UserRegistrationController extends PageController {
             validateRegistration(email, psw, pswRepeat);
             UserRegistrationDTO userRegistrationDTO = new UserRegistrationDTO(name, surName, email, psw);
             userService.createUser(userRegistrationDTO);
-            resp.sendRedirect(URL_LOGIN_PAGE);
+            resp.sendRedirect(URL_LOGIN_PAGE + "?registration=true");
         }
         catch (ValidationException ex) {
             req.getSession().setAttribute("errorsMap", ex.getValidationMap());
