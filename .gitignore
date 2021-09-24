@@ -2,6 +2,7 @@
 out/
 target/
 tomcat.80/
+logs/
 
 
 *.class
