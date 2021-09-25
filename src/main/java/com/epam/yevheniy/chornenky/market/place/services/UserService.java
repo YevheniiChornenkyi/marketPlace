@@ -14,16 +14,19 @@ import static com.epam.yevheniy.chornenky.market.place.repositories.entities.Use
 public class UserService {
     private final UserRepository repository;
     private final EmailService emailService;
+    private final PasswordService passwordService;
 
-    public UserService(UserRepository repository, EmailService emailService) {
+    public UserService(UserRepository repository, EmailService emailService, PasswordService passwordService) {
         this.repository = repository;
         this.emailService = emailService;
+        this.passwordService = passwordService;
     }
 
     public Authentication authenticate(String email, String psw) {
         UserEntity user = repository.findByEmail(email).orElseThrow(AuthenticationException::new);
+        String password = passwordService.getHash(psw);
 
-        if (!user.getPsw().equals(psw)) {
+        if (!user.getPsw().equals(password)) {
             throw new AuthenticationException();
         }
         if (!user.getIsActive()) {
@@ -37,8 +40,9 @@ public class UserService {
             throw new ValidationException(Map.of("email", "msg.email-not-unique"));
         }
         String id = UUID.randomUUID().toString();
+        String password = passwordService.getHash(userRegistrationDTO.getPsw());
         UserEntity user = new UserEntity(userRegistrationDTO.getName(), userRegistrationDTO.getSurName(),
-                userRegistrationDTO.getPsw(), userRegistrationDTO.getEmail(), id, Role.NOT_ACTIVATE);
+                password, userRegistrationDTO.getEmail(), id, Role.NOT_ACTIVATE);
         repository.createUser(user);
         String userActivationLink = repository.createUserActivationLink(id);
         emailService.sendEmail(user.getEmail(), "Activation", getEmailBodyForActivationLatter(userActivationLink));

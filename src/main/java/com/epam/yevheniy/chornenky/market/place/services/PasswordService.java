@@ -29,7 +29,6 @@ public class PasswordService {
             for (byte b : digest) {
                 hash.append(Integer.toString((b & 0Xff) + 0X100, 16));
             }
-
             return hash.toString().toUpperCase();
         } catch (NoSuchAlgorithmException e) {
             LOGGER.error("Cant find md5 algorithm");

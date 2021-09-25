@@ -15,7 +15,7 @@
             <div class="container">
 
 
-                <h1><fmt:message key="msg.login" bundle="${menu}"/></h1>
+                <h1><fmt:message key="msg.LOGIN" bundle="${menu}"/></h1>
                 <p><fmt:message key="msg.login-comment" bundle="${message}"/></p>
                 <hr>
 
@@ -42,7 +42,7 @@
                 </c:if>
 
 
-                <button type="submit" class="loginbtn"><fmt:message key="msg.login" bundle="${menu}"/></button>
+                <button type="submit" class="loginbtn"><fmt:message key="msg.LOGIN" bundle="${menu}"/></button>
 
             </div>
         </form>

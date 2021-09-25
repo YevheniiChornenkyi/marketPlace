@@ -50,6 +50,10 @@
             <param-name>hostPort</param-name>
             <param-value>587</param-value>
         </init-param>
+        <init-param>
+            <param-name>salt</param-name>
+            <param-value>gladiolus</param-value>
+        </init-param>
 
         <multipart-config>
             <max-file-size>10485760</max-file-size>

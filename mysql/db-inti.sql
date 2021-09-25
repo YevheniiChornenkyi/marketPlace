@@ -17,7 +17,7 @@ CREATE TABLE users(
     id VARCHAR(36) NOT NULL,
     name VARCHAR(40) NOT NULL,
     surname VARCHAR(40) NOT NULL,
-    psw VARCHAR(40) NOT NULL,
+    psw VARCHAR(48) NOT NULL,
     role_id VARCHAR(36) NOT NULL,
     email VARCHAR(40) NOT NULL,
     is_active BIT(1) DEFAULT 1 NOT NULL,
@@ -27,9 +27,11 @@ CREATE TABLE users(
             ON DELETE CASCADE
 );
 
-INSERT INTO users (id, name, surname, psw, role_id, email) VALUES ("1", "Yevheniy" , "Chornenkiy", "login1", "1", "evgeny.chornenky@gmail.com" );
-INSERT INTO users (id, name, surname, psw, role_id, email, is_active) VALUES ("2", "Boris" , "Britva", "login1", "2", "boris@gmail.com", 0);
-INSERT INTO users (id, name, surname, psw, role_id, email, is_active) VALUES ("3", "Anton" , "Baton", "login1", "2", "anton@gmail.com", 1);
+INSERT INTO users (id, name, surname, psw, role_id, email) VALUES ("1", "Yevheniy" , "Chornenkiy", "16B1BE10A1231B71A11E711F1261641B81AE1BB1721F1124", "1", "evgeny.chornenky@gmail.com" );
+INSERT INTO users (id, name, surname, psw, role_id, email, is_active) VALUES ("2", "Boris" , "Menethil", "16B1BE10A1231B71A11E711F1261641B81AE1BB1721F1124", "2", "boris@gmail.com", 0);
+INSERT INTO users (id, name, surname, psw, role_id, email, is_active) VALUES ("3", "Dmitrii" , "Hellscream", "16B1BE10A1231B71A11E711F1261641B81AE1BB1721F1124", "2", "anton@gmail.com", 1);
+INSERT INTO users (id, name, surname, psw, role_id, email, is_active) VALUES ("4", "Bogdan" , "Lightbringer", "16B1BE10A1231B71A11E711F1261641B81AE1BB1721F1124", "2", "anton@gmail.com", 1);
+INSERT INTO users (id, name, surname, psw, role_id, email, is_active) VALUES ("5", "Vitaly" , "Fordring", "16B1BE10A1231B71A11E711F1261641B81AE1BB1721F1124", "2", "anton@gmail.com", 1);
 
 CREATE TABLE categories (
      id INT NOT NULL AUTO_INCREMENT,

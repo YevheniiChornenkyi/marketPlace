@@ -59,7 +59,8 @@ public class ContextInitializer {
                     servletConfig.getInitParameter("marketEmailPass"),
                     servletConfig.getInitParameter("smtpHost"),
                     servletConfig.getInitParameter("hostPort"));
-            UserService userService = new UserService(userRepository, emailService);
+            PasswordService passwordService = new PasswordService(servletConfig.getInitParameter("salt"));
+            UserService userService = new UserService(userRepository, emailService, passwordService);
             GoodsService goodsService = new GoodsService(goodsRepository, imageService);
             OrderService orderService = new OrderService(orderRepository);
 
