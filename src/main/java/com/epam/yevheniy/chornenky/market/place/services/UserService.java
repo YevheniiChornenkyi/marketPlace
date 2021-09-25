@@ -27,14 +27,14 @@ public class UserService {
             throw new AuthenticationException();
         }
         if (!user.getIsActive()) {
-            throw new AuthenticationException("User is banned");
+            throw new AuthenticationException("msg.user-banned");
         }
         return new Authentication(user.getName(), user.getSurName(), user.getEmail(), user.getRole(), user.getId());
     }
 
     public void createUser(UserRegistrationDTO userRegistrationDTO) {
         if (!emailCheckUniqueness(userRegistrationDTO.getEmail())) {
-            throw new ValidationException(Map.of("email", "Email not unique"));
+            throw new ValidationException(Map.of("email", "msg.email-not-unique"));
         }
         String id = UUID.randomUUID().toString();
         UserEntity user = new UserEntity(userRegistrationDTO.getName(), userRegistrationDTO.getSurName(),

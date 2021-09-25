@@ -3,6 +3,7 @@ package com.epam.yevheniy.chornenky.market.place.servlet.controllers;
 import com.epam.yevheniy.chornenky.market.place.exceptions.AuthenticationException;
 import com.epam.yevheniy.chornenky.market.place.exceptions.ValidationException;
 import com.epam.yevheniy.chornenky.market.place.services.UserService;
+import com.epam.yevheniy.chornenky.market.place.servlet.controllers.validators.RegistrarValidator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +30,7 @@ public class AuthorizationController extends PageController {
         String psw = req.getParameter("psw");
         HttpSession session = req.getSession();
         try {
+            RegistrarValidator.pswValidateThrow(psw);
             UserService.Authentication authentication = userService.authenticate(email, psw);
             isActive(authentication);
             session.setAttribute("authentication", authentication);
@@ -47,6 +49,5 @@ public class AuthorizationController extends PageController {
             throw new ValidationException(Map.of("activation", "false"));
         }
     }
-
 }
 

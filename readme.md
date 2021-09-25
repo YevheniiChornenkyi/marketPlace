@@ -1,0 +1,1 @@
+Product images are stored in the folder should be specified in web.xml (line 35)

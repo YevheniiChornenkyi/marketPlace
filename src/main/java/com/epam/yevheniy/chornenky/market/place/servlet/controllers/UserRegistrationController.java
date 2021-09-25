@@ -1,6 +1,7 @@
 package com.epam.yevheniy.chornenky.market.place.servlet.controllers;
 
 import com.epam.yevheniy.chornenky.market.place.exceptions.ValidationException;
+import com.epam.yevheniy.chornenky.market.place.services.PasswordService;
 import com.epam.yevheniy.chornenky.market.place.services.UserService;
 import com.epam.yevheniy.chornenky.market.place.servlet.controllers.validators.RegistrarValidator;
 import com.epam.yevheniy.chornenky.market.place.servlet.dto.UserRegistrationDTO;
@@ -15,6 +16,7 @@ import java.util.Map;
 public class UserRegistrationController extends PageController {
 
     private static final String URL_LOGIN_PAGE = "/login";
+    private static final String URL_REGISTER_PAGE = "/registration";
 
     private final UserService userService;
 
@@ -37,20 +39,20 @@ public class UserRegistrationController extends PageController {
         }
         catch (ValidationException ex) {
             req.getSession().setAttribute("errorsMap", ex.getValidationMap());
-            resp.sendRedirect(URL_LOGIN_PAGE);
+            resp.sendRedirect(URL_REGISTER_PAGE);
         }
     }
 
     private void validateRegistration(String email, String psw, String pswRepeat) {
         Map<String, String> validationMap = new HashMap<>();
         if (!RegistrarValidator.loginValidate(email)) {
-            validationMap.put("email", "Invalid email format");
+            validationMap.put("email", "msg.email-format-false");
         }
         if (!RegistrarValidator.pswValidate(psw)) {
-            validationMap.put("psw", "Password must contain more than 6 characters, including Latin Cyrillic and numbers.");
+            validationMap.put("psw", "msg.psw-format-false");
         }
         if (!RegistrarValidator.pswRepeatValidate(psw, pswRepeat)) {
-            validationMap.put("pswRepeat", "Password mismatch");
+            validationMap.put("pswRepeat", "msg.psw-mismatch");
         }
         if (!validationMap.isEmpty()) {
             throw new ValidationException(validationMap);

@@ -22,10 +22,10 @@ public abstract class PageController {
     }
 
     protected void before(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html; charset=UTF-8");
         LOGGER.info("Start processing new request with URL:{}, and HTTP method: {}", req.getRequestURL(), req.getMethod());
     }
 
     protected void after(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html; charset=UTF-8");
     }
 }

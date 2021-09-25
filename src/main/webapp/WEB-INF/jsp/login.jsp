@@ -1,7 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${session.lang}"/>
-<fmt:setBundle basename="test" />
+<fmt:setBundle basename="message" var="message"/>
+<fmt:setBundle basename="menu" var="menu"/>
 
 <html>
     <head>
@@ -13,38 +14,37 @@
         <form action="/action/login" method="post">
             <div class="container">
 
-                <div><fmt:message key="msg.test"/></div>
 
-                <h1>Login</h1>
-                <p>Please enter your credentials to login.</p>
+                <h1><fmt:message key="msg.login" bundle="${menu}"/></h1>
+                <p><fmt:message key="msg.login-comment" bundle="${message}"/></p>
                 <hr>
 
                 <c:if test="${errorsMap.containsKey('authorization')}">
-                    <p class="validation-error">You must be authorized for this action.</p>
+                    <p class="validation-error"><fmt:message key="msg.error-not-authorized" bundle="${message}"/></p>
                 </c:if>
                 <c:if test="${errorsMap.containsKey('activation')}">
-                    <p class="validation-error">This account does not activate</p>
+                    <p class="validation-error"><fmt:message key="msg.error-not-activate" bundle="${message}"/></p>
                 </c:if>
                 <c:if test="${param.registration eq 'true'}">
-                    <p class="green-text">We send activation code to specified email. Please follow the specified link to activate you account.</p>
+                    <p class="green-text"><fmt:message key="msg.authorized-true-message" bundle="${message}"/></p>
                 </c:if>
 
-                <label for="email"><b>Email</b></label>
-                <input type="email" pattern=".+@.+\..+"  placeholder="Enter Email" name="email" required>
+                <label for="email"><b><fmt:message key="msg.email" bundle="${menu}"/></b></label>
+                <input type="email" pattern=".+@.+\..+"  placeholder=<fmt:message key='msg.email-place-holder' bundle="${menu}"/> name="email" required>
                 <c:if test="${errorsMap.containsKey('email')}">
-                    <p class="validation-error">${errorsMap.get("email")}</p>
+                    <p class="validation-error"><fmt:message key="${errorsMap.get('email')}" bundle='${message}'/></p>
                 </c:if>
 
-                <label for="psw"><b>Password</b></label>
-                <input type="password" pattern="(?=.*[0-9])(?=.*[a-zа-я])[0-9a-zA-Zа-яА-ЯёЁіІїЇ!@#$%^&*]{6,}" placeholder="Enter Password" name="psw" required>
+                <label for="psw"><b><fmt:message key="msg.password" bundle="${menu}"/></b></label>
+                <input type="password" pattern="(?=.*[0-9])(?=.*[a-zа-я])[0-9a-zA-Zа-яА-ЯёЁіІїЇ!@#$%^&*]{6,}" placeholder=<fmt:message key='msg.password-place-holder' bundle='${menu}'/> name="psw" required>
                 <c:if test="${errorsMap.containsKey('psw')}">
-                    <p class="validation-error">${errorsMap.get("psw")}</p>
+                    <p class="validation-error"><fmt:message key="${errorsMap.get('psw')}" bundle='${message}'/></p>
                 </c:if>
 
 
-                <button type="submit" class="loginbtn">Login</button>
-            </div>
+                <button type="submit" class="loginbtn"><fmt:message key="msg.login" bundle="${menu}"/></button>
 
+            </div>
         </form>
 
     </body>

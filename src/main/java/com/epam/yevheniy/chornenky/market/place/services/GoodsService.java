@@ -105,10 +105,10 @@ public class GoodsService {
         Map<String, String> validationMap = new HashMap<>();
 
         if (categoryEntityOptional.isEmpty()) {
-            validationMap.put("category", "This category does not exist");
+            validationMap.put("category", "msg.category-does-not-exist");
         }
         if (manufacturerEntityOptional.isEmpty()) {
-            validationMap.put("manufacturer", "This category does not exist");
+            validationMap.put("manufacturer", "msg.manufacturer-does-not-exist");
         }
         if (!validationMap.isEmpty()) {
             throw new ValidationException(validationMap);

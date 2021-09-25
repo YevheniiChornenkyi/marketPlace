@@ -1,5 +1,8 @@
 package com.epam.yevheniy.chornenky.market.place.servlet.controllers.validators;
 
+import com.epam.yevheniy.chornenky.market.place.exceptions.ValidationException;
+
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +23,12 @@ public class RegistrarValidator {
         Pattern p = Pattern.compile(PSW_REGEX);
         Matcher matcher = p.matcher(psw);
         return matcher.matches();
+    }
+
+    public static void pswValidateThrow(String psw) {
+        if (!pswValidate(psw)) {
+            throw new ValidationException(Map.of("psw", "msg.psw-format-false"));
+        }
     }
 
     public static boolean pswRepeatValidate(String psw, String pswRepeat) {

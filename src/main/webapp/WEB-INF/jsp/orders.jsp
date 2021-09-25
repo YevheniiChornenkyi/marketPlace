@@ -1,4 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${session.lang}"/>
+<fmt:setBundle basename="message" var="message"/>
+<fmt:setBundle basename="menu" var="menu"/>
+
 <html>
     <head>
         <link href="/static/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -8,7 +13,7 @@
         <div class="cart_section">
                 <div class="row">
                     <div class="col-lg-10 offset-lg-1">
-                            <div class="cart_title">Order list </small></div>
+                            <div class="cart_title"><fmt:message key="msg.order-list" bundle="${menu}"/></small></div>
 
                             <c:forEach var="item" items="${orderViewDTOList}">
                                 <div class="cart_items">
@@ -17,30 +22,30 @@
                                             <div class="cart_item_info d-flex flex-md-row flex-column justify-content-between">
                                                 <c:if test="${authentication.getName() eq 'ADMIN'}">
                                                     <div class="cart_item_name cart_info_col">
-                                                        <div class="cart_item_title">Order id</div>
+                                                        <div class="cart_item_title"><fmt:message key="msg.order-id" bundle="${menu}"/></div>
                                                         <div class="cart_item_text">${item.getOrderId()}</div>
                                                     </div>
                                                 </c:if>
                                                 <c:if test="${authentication.getName() eq 'ADMIN'}">
                                                     <div class="cart_item_name cart_info_col">
-                                                        <div class="cart_item_title">User id</div>
+                                                        <div class="cart_item_title"><fmt:message key="msg.user-id" bundle="${menu}"/></div>
                                                         <div class="cart_item_text">${item.getUserId()}</div>
                                                     </div>
                                                 </c:if>
                                                 <div class="cart_item_name cart_info_col">
-                                                    <div class="cart_item_title">Status</div>
+                                                    <div class="cart_item_title"><fmt:message key="msg.status" bundle="${menu}"/></div>
                                                     <div class="cart_item_text">${item.getStatus()}</div>
                                                 </div>
                                                 <div class="cart_item_name cart_info_col">
-                                                    <div class="cart_item_title">Address</div>
+                                                    <div class="cart_item_title"><fmt:message key="msg.address" bundle="${menu}"/></div>
                                                     <div class="cart_item_text">${item.getAddress()}</div>
                                                 </div>
                                                 <div class="cart_item_name cart_info_col">
-                                                    <div class="cart_item_title">Phone number</div>
+                                                    <div class="cart_item_title"><fmt:message key="msg.phone-number" bundle="${menu}"/></div>
                                                     <div class="cart_item_text">${item.getPhoneNumber()}</div>
                                                 </div>
                                                 <div class="cart_item_name cart_info_col">
-                                                    <div class="cart_item_title">Price</div>
+                                                    <div class="cart_item_title"><fmt:message key="msg.price" bundle="${menu}"/></div>
                                                     <div class="cart_item_text">${item.getPrice()}</div>
                                                 </div>
                                                 <form action"/action/orders" method="post">
@@ -59,7 +64,7 @@
                                                         </select>
                                                         <input type="hidden" value="newStatus" name="orderNote">
                                                         <input type="hidden" name="orderId" value="${item.getOrderId()}" required>
-                                                        <button type="submit" class="status-button">Change status</button>
+                                                        <button type="submit" class="status-button"><fmt:message key="msg.change-status" bundle="${menu}"/></button>
 
                                                     </c:if>
                                                 </form>
@@ -73,19 +78,19 @@
                                                         <div class="cart_item_info d-flex flex-md-row flex-column justify-content-between">
 
                                                             <div class="cart_item_name cart_info_col">
-                                                                <div class="cart_item_title">Goods id</div>
+                                                                <div class="cart_item_title"><fmt:message key="msg.goods-id" bundle="${menu}"/></div>
                                                                 <div class="cart_item_text">${orderItem.getGoodsId()}</div>
                                                             </div>
                                                             <div class="cart_item_name cart_info_col">
-                                                                <div class="cart_item_title">Quantity</div>
+                                                                <div class="cart_item_title"><fmt:message key="msg.quantity" bundle="${menu}"/></div>
                                                                 <div class="cart_item_text">${orderItem.getQuantity()}</div>
                                                             </div>
                                                             <div class="cart_item_name cart_info_col">
-                                                                <div class="cart_item_title">Unit price</div>
+                                                                <div class="cart_item_title"><fmt:message key="msg.unit-price" bundle="${menu}"/></div>
                                                                 <div class="cart_item_text">${orderItem.getPrice()}</div>
                                                             </div>
                                                             <div class="cart_item_name cart_info_col">
-                                                                <div class="cart_item_title">Total price</div>
+                                                                <div class="cart_item_title"><fmt:message key="msg.total-price" bundle="${menu}"/></div>
                                                                 <div class="cart_item_text">${orderItem.getTotalPrice()}</div>
                                                             </div>
 

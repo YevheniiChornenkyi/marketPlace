@@ -14,17 +14,17 @@ public class GoodsValidator {
 
     public static void validatePrice(String price){
         if (!price.matches(IS_NUMBER_REGEX)) {
-            throw new ValidationException(Collections.singletonMap("price", "Incorrect data, enter the cost of the product."));
+            throw new ValidationException(Collections.singletonMap("price", "msg.price-format-false"));
         }
     }
 
     public static void validatePriceImage(String price, String fileName) {
         Map<String, String> validationMap = new HashMap<>();
         if (!price.matches(IS_NUMBER_REGEX)) {
-            validationMap.put("price", "Incorrect data, enter the cost of the product.");
+            validationMap.put("price", "msg.price-format-false");
         }
         if (!isPicture(fileName)) {
-            validationMap.put("image", "Incorrect image extension, select picture with next extensions: png, jpeg, jpg");
+            validationMap.put("image", "msg.image-extension-false");
         }
         if (!validationMap.isEmpty()) {
             throw new ValidationException(validationMap);

@@ -1,3 +1,7 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${session.lang}"/>
+<fmt:setBundle basename="message"/>
+
 <html>
     <head>
         <link href="/static/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -5,9 +9,9 @@
     </head>
     <body>
          <div class="text">
-             <p> Something went wrong
+             <p> <fmt:message key="msg.something-went-wrong"/>
              <br><br>
-             We know about the problem, and we will fix everything soon</p>
+             <fmt:message key="msg.error-page-label"/></p>
          </div>
     </body>
 </html>

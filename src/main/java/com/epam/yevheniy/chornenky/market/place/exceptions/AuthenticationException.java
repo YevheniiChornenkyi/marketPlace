@@ -1,7 +1,7 @@
 package com.epam.yevheniy.chornenky.market.place.exceptions;
 
 public class AuthenticationException extends CommonException {
-    private String MESSAGE = "Login or password incorrect";
+    private String MESSAGE = "msg.incorrect-log-or-psw";
 
     public AuthenticationException() {
     }
