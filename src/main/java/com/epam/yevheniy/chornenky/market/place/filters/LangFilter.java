@@ -10,7 +10,14 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class LangFilter extends HttpFilter {
-
+    /**
+     * Sets the locale which it takes from the request parameters
+     * @param request HttpServletRequest request
+     * @param response HttpServletResponse response
+     * @param chain FilterChain
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String lang = request.getParameter("lang");

@@ -9,6 +9,14 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class PathFilter extends HttpFilter {
+    /**
+     * add /action to all request URL that don't start with a /action or /static
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param chain FilterChain
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String requestURI = request.getRequestURI();
@@ -25,6 +33,11 @@ public class PathFilter extends HttpFilter {
         super.doFilter(request, response, chain);
     }
 
+    /**
+     * extract parameters from request
+     * @param request HttpServletRequest
+     * @return
+     */
     private String getRequestParametersOrEmpty(HttpServletRequest request) {
         return Optional.ofNullable(request.getQueryString())
                 .map(parameters -> "?" + parameters)

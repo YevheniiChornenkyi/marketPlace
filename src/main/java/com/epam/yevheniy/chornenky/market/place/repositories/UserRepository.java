@@ -25,7 +25,7 @@ public class UserRepository {
     private static final String CREATE_NEW_USER_QUERY = "INSERT INTO users (id, name, surname, psw, role_id, email) VALUE (?, ?, ?, ?, ?, ?)";
     public static final String GET_ALL_USERS_QUERY = "SELECT users.id, users.name, users.surname, users.psw, roles.role_name, users.email, users.is_active FROM users LEFT JOIN roles ON users.role_id=roles.id";
     public static final String UPDATE_USER_IS_ACTIVE_COLUMN_QUERY = "UPDATE users SET users.is_active=? WHERE users.id=?";
-    public static final String SELECT_ACIVATION_COD_BY_ID_QUERY = "SELECT activation_cods.user_id FROM activation_cods WHERE activation_cods.activation_cod=?";
+    public static final String SELECT_ACTIVATION_COD_BY_ID_QUERY = "SELECT activation_cods.user_id FROM activation_cods WHERE activation_cods.activation_cod=?";
     public static final String UPDATE_USER_ROLE_QUERY = "UPDATE users SET users.role_id=2 WHERE users.id=?";
     public static final String INSERT_ACTIVATION_CODE_QUERY = "INSERT INTO activation_cods (user_id, activation_cod) VALUES (?, ?)";
 
@@ -153,7 +153,7 @@ public class UserRepository {
     }
 
     private String getUserIdFromActivationCodsByKey(String key, Connection connection) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ACIVATION_COD_BY_ID_QUERY);
+        PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ACTIVATION_COD_BY_ID_QUERY);
         preparedStatement.setString(1, key);
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();

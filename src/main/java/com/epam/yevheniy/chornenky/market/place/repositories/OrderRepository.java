@@ -22,6 +22,7 @@ public class OrderRepository {
     public static final String SELECT_ALL_ORDERS_QUERY = "SELECT * FROM orders";
     public static final String SELECT_ORDERS_ITEM_BY_ORDER_ID = "SELECT * FROM order_item WHERE parent_order_id=?";
     public static final String SELECT_ALL_STATUSES_QUERY = "SELECT * FROM statuses";
+    public static final String UPDATE_ORDER_STATUS_BY_ID = "UPDATE orders SET orders.status=? WHERE orders.order_id=?";
 
 
     private final ConnectionManager connectionManager;
@@ -149,7 +150,7 @@ public class OrderRepository {
 
     public void changeOrderStatusById(String orderId, String newStatus) {
         try(Connection connection = connectionManager.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE orders SET orders.status=? WHERE orders.order_id=?");
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_STATUS_BY_ID);
             preparedStatement.setString(1, newStatus);
             preparedStatement.setString(2, orderId);
             preparedStatement.executeUpdate();

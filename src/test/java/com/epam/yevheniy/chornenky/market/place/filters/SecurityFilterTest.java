@@ -2,10 +2,8 @@ package com.epam.yevheniy.chornenky.market.place.filters;
 
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.UserEntity;
 import com.epam.yevheniy.chornenky.market.place.services.UserService;
-import com.epam.yevheniy.chornenky.market.place.servlet.controllers.utils.SessionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
@@ -18,15 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SecurityFilterTest {
 
     @Spy
-    private SecurityFilter tested = new SecurityFilter();
+    private SecurityFilter tested;
 
     @Mock
     private HttpServletRequest request;

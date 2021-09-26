@@ -29,13 +29,13 @@ public class OrdersControllerGet extends PageController{
 
         try {
             UserEntity.Role userRole = SessionUtils.getRoleFromRequestOrThrow(req);
-            String userId = SessionUtils.getIdIfAuthorized(req);
             List<OrderViewDTO> orderViewDTOList;
             if (userRole.getId().equals("1")) {
                 orderViewDTOList = orderService.getOrderViewDTOList();
                 List<OrderEntity.Status> statuses = orderService.getAllStatuses();
                 req.getSession().setAttribute("statuses", statuses);
             } else {
+                String userId = SessionUtils.getIdIfAuthorized(req);
                 orderViewDTOList = orderService.getOrderViewDTOListById(userId);
             }
             req.getSession().setAttribute("orderViewDTOList", orderViewDTOList);
