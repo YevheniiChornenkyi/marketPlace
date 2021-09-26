@@ -10,9 +10,9 @@
 
     <body>
         <div class="text">
-            <p><fmt:message key="msg.page-not-found">
+            <p><fmt:message key="msg.page-not-found"/>
             <br><br>
-            <fmt:message key="msg.page-not-found-label"></p>
+            <fmt:message key="msg.page-not-found-label"/></p>
         </div>
     </body>
 </html>
