@@ -12,6 +12,15 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 
+/**
+ * used when requesting POST/action/login
+ * receive from request email
+ * receive from request psw
+ * send received data to service
+ * received from service authentication object set to session attribute
+ * send redirect to homePage
+ * if service throw exception set to session exceptionMap and redirect to login page
+ */
 public class AuthorizationController extends PageController {
 
 

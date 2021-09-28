@@ -9,6 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * used when requesting GET/action/home-page
+ * receive from request parameters to create createSiteFilterDTO and send it to Goods service
+ * sent to service request for categoryDTOList
+ * received objects set to session attribute
+ * make forward to home-page.jsp
+ */
 public class HomePageController extends PageController {
 
     private static final String JSP_PATH = "/WEB-INF/jsp/home-page.jsp";

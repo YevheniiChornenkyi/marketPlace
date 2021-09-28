@@ -14,7 +14,6 @@
         <form action="/action/login" method="post">
             <div class="container">
 
-
                 <h1><fmt:message key="msg.LOGIN" bundle="${menu}"/></h1>
                 <p><fmt:message key="msg.login-comment" bundle="${message}"/></p>
                 <hr>

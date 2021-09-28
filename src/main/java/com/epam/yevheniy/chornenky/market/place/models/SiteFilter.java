@@ -3,11 +3,13 @@ package com.epam.yevheniy.chornenky.market.place.models;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
+/**
+ *Accepts data specified by the user in the filter on the site. Uses a builder pattern.
+ */
 public class SiteFilter {
 
-    private List<Integer> categories = new ArrayList<>();
+    private final List<Integer> categories = new ArrayList<>();
     private SortedType sortedType = SortedType.ALPHABETIC;
     private Order order = Order.ASCENDING;
     private String minPrice = "";
@@ -15,10 +17,6 @@ public class SiteFilter {
 
     public List<Integer> getCategories() {
         return categories;
-    }
-
-    private void setCategories(List<Integer> categories) {
-        this.categories = categories;
     }
 
     public SortedType getSortedType() {
@@ -57,6 +55,9 @@ public class SiteFilter {
         this.maxPrice = maxPrice;
     }
 
+    /**
+     * builder of siteFilter class
+     */
     public static class Builder {
 
         private final SiteFilter siteFilter = new SiteFilter();

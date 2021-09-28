@@ -5,6 +5,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * used when requesting GET/action/cart
+ * make forward to cart.jsp
+ */
 public class CartGetController extends PageController{
 
     public static final String JSP_PATH = "/WEB-INF/jsp/cart.jsp";

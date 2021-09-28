@@ -9,6 +9,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
+/**
+ * Service for sending letters
+ */
 public class EmailService {
 
     private static final Logger LOGGER = LogManager.getLogger(EmailService.class);
@@ -27,18 +30,25 @@ public class EmailService {
         session = Session.getInstance(getPropertiesForSession(), getAuthenticatorForSession());
     }
 
+    /**
+     *
+     * @return properties of session
+     */
     private Properties getPropertiesForSession() {
         Properties props = new Properties();
-        props.put("mail.smtp.host", smtpHost); //SMTP Host
-        props.put("mail.smtp.port", port); //TLS Port
-        props.put("mail.smtp.auth", "true"); //enable authentication
-        props.put("mail.smtp.starttls.enable", "true"); //enable STARTTLS
+        props.put("mail.smtp.host", smtpHost);
+        props.put("mail.smtp.port", port);
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
         return props;
     }
 
+    /**
+     *
+     * @return authenticator for session. contains email sender and psw to sender email.
+     */
     private Authenticator getAuthenticatorForSession() {
         return new Authenticator() {
-            //override the getPasswordAuthentication method
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(email, password);
@@ -46,6 +56,10 @@ public class EmailService {
         };
     }
 
+    /**
+     * Send recipient latter. Body contains text of latter.
+     * @param body latter
+     */
     public void sendEmail(String recipient, String subject, String body) {
         try {
             MimeMessage message = new MimeMessage(session);
@@ -57,12 +71,5 @@ public class EmailService {
             LOGGER.error("Incorrect email, or message does not exist", e);
             throw new EmailException();
         }
-    }
-
-    public static void main(String[] args) throws MessagingException {
-        EmailService emailService = new EmailService("market.place.toolz@gmail.com", "market@place",
-                "smtp.gmail.com", "587");
-
-        emailService.sendEmail("evgeny.chornenky@gmail.com", "epam", "trololo");
     }
 }

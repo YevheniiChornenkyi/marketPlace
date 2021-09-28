@@ -14,8 +14,6 @@ public class PathFilter extends HttpFilter {
      * @param request HttpServletRequest
      * @param response HttpServletResponse
      * @param chain FilterChain
-     * @throws IOException
-     * @throws ServletException
      */
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -36,7 +34,6 @@ public class PathFilter extends HttpFilter {
     /**
      * extract parameters from request
      * @param request HttpServletRequest
-     * @return
      */
     private String getRequestParametersOrEmpty(HttpServletRequest request) {
         return Optional.ofNullable(request.getQueryString())

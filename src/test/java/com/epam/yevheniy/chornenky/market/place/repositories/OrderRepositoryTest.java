@@ -18,8 +18,6 @@ import java.util.List;
 public class OrderRepositoryTest {
 
     @Mock
-    private List<OrderEntity.OrderItem> orderItems;
-    @Mock
     private ConnectionManager connectionManager;
     @Mock
     private Connection connection;

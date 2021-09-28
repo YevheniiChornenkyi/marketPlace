@@ -18,6 +18,10 @@ import java.util.UUID;
 
 import static com.epam.yevheniy.chornenky.market.place.repositories.entities.UserEntity.*;
 
+/**
+ * Class unites the logic of accessing the database related to users
+ * accepts a connectionManager
+ */
 public class UserRepository {
 
     private static final Logger LOGGER = LogManager.getLogger(ConnectionManager.class);
@@ -36,6 +40,10 @@ public class UserRepository {
         this.connectionManager = connectionManager;
     }
 
+    /**
+     * Sends a request to the database to save the user with parameters accepted in object userEntity.
+     * @param user userEntity
+     */
     public void createUser(UserEntity user) {
         try (Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(CREATE_NEW_USER_QUERY);
@@ -52,6 +60,11 @@ public class UserRepository {
         }
     }
 
+    /**
+     * Find user in database by email return optional of founded user. empty if not found.
+     * @param emailForSearch user email
+     * @return Optional<UserEntity>
+     */
     public Optional<UserEntity> findByEmail(String emailForSearch) {
         try (Connection con = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = con.prepareStatement(GET_USER_BY_EMAIL_QUERY);
@@ -75,6 +88,10 @@ public class UserRepository {
         return Optional.empty();
     }
 
+    /**
+     * Send query to database. Return all users in List<UserEntity> format
+     * @return List<UserEntity>
+     */
     public List<UserEntity> getAllUsersList() {
         List<UserEntity> userEntities = new ArrayList<>();
         try(Connection connection = connectionManager.getConnection()) {
@@ -100,6 +117,10 @@ public class UserRepository {
         return userEntities;
     }
 
+    /**
+     * Send query to database. Change userId(accepted in parameters) field "Is_active" to 0(banned)
+     * @param userId user id who will be banned
+     */
     public void banById(String userId) {
         try(Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_IS_ACTIVE_COLUMN_QUERY);
@@ -112,6 +133,10 @@ public class UserRepository {
         }
     }
 
+    /**
+     * Send query to database. Change userId(accepted in parameters) field "Is_active" to 1(unbanned)
+     * @param userId user id who will be unbanned
+     */
     public void unBanById(String userId) {
         try(Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_IS_ACTIVE_COLUMN_QUERY);
@@ -124,6 +149,11 @@ public class UserRepository {
         }
     }
 
+    /**
+     * Send query to database. Generate random key for user. Save key in database.
+     * @param id user id
+     * @return activation key in String format
+     */
     public String createUserActivationLink(String id) {
         String key = UUID.randomUUID().toString();
         try(Connection connection = connectionManager.getConnection()) {
@@ -139,6 +169,10 @@ public class UserRepository {
         return key;
     }
 
+    /**
+     * Send query to database. Verifies the received key with the key stored in the database. If they match, changes the user's status to CUSTOMER
+     * @param key activation key
+     */
     public void activateUser(String key) {
         try(Connection connection = connectionManager.getConnection()) {
             String userId = getUserIdFromActivationCodsByKey(key, connection);
@@ -152,6 +186,13 @@ public class UserRepository {
         }
     }
 
+    /**
+     * Send query to database. Return key-bound user id accepted in parameters
+     * @param key activation key
+     * @param connection connection to database
+     * @return user id
+     * @throws SQLException processed above
+     */
     private String getUserIdFromActivationCodsByKey(String key, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ACTIVATION_COD_BY_ID_QUERY);
         preparedStatement.setString(1, key);

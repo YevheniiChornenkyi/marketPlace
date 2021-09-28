@@ -12,12 +12,24 @@ public class GoodsValidator {
     private static final List<String> EXTENSIONS_ALLOWED = List.of("png", "jpeg", "jpg");
     public static final String IS_NUMBER_REGEX = "^\\d+(?:[.,]\\d{1,2})?$";
 
+    /**
+     * backend price validation
+     * is price a number
+     * @param price price
+     */
     public static void validatePrice(String price){
         if (!price.matches(IS_NUMBER_REGEX)) {
             throw new ValidationException(Collections.singletonMap("price", "msg.price-format-false"));
         }
     }
 
+    /**
+     * backend price and image validation
+     * is price a number
+     * image extension check
+     * @param price price
+     * @param fileName image
+     */
     public static void validatePriceImage(String price, String fileName) {
         Map<String, String> validationMap = new HashMap<>();
         if (!price.matches(IS_NUMBER_REGEX)) {
@@ -31,6 +43,12 @@ public class GoodsValidator {
         }
     }
 
+    /**
+     * backend image validation
+     * image extension check
+     * @param fileName image
+     * @return boolean true if image extension allowed or false
+     */
     private static boolean isPicture(String fileName) {
         String[] split = fileName.split("\\.");
         if (split.length > 0) {

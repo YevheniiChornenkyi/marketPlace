@@ -15,8 +15,6 @@ public class LangFilter extends HttpFilter {
      * @param request HttpServletRequest request
      * @param response HttpServletResponse response
      * @param chain FilterChain
-     * @throws IOException
-     * @throws ServletException
      */
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {

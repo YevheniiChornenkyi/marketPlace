@@ -7,8 +7,11 @@ import org.apache.logging.log4j.Logger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
+/**
+ * password hashing service
+ * us salt received in constructor
+ */
 public class PasswordService {
     private static final Logger LOGGER = LogManager.getLogger(PasswordService.class);
 
@@ -18,6 +21,11 @@ public class PasswordService {
         this.salt = salt;
     }
 
+    /**
+     * receive string. Return hashed algorithm received string
+     * @param psw string
+     * @return psw hash
+     */
     public String getHash(String psw) {
         try {
             String pswWithSalt = psw + salt;

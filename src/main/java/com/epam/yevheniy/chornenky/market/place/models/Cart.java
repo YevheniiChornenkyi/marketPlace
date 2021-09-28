@@ -7,21 +7,37 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.util.*;
 
+/**
+ * the object responsible for the operations with the cart.
+ * Keep purchases in the MAP. Key - goods. Value - quantity
+ */
 public class Cart {
     private static final Logger LOGGER = LogManager.getLogger(Cart.class);
     private final Map<GoodsViewDTO, Integer> cart = new HashMap<>();
 
+    /**
+     * add goods to cart or increase quantity by +1
+     * @param goodsViewDTO all information about goods(id, model, price, description, category, manufacturer, imageName, date of created)
+     */
     public void addToCart(GoodsViewDTO goodsViewDTO) {
         cart.computeIfPresent(goodsViewDTO, (item, count) -> count + 1);
         cart.putIfAbsent(goodsViewDTO, 1);
         LOGGER.info("Added new item to cart now cart have {} items. Added item parameters: {}", getGoodsCount(), goodsViewDTO);
     }
 
+    /**
+     * increase goods count by 1 (value of map)
+     * @param id goods id
+     */
     public void increaseGoodsCount(int id) {
         Optional<GoodsViewDTO> goodsViewDTOOptional = findIfPresent(id);
         goodsViewDTOOptional.ifPresent(goodsDTO -> cart.computeIfPresent(goodsDTO, (item, count) -> count + 1));
     }
 
+    /**
+     * decrease goods count by 1 (value of map)
+     * @param id goods id
+     */
     public void decreaseGoodsCount(int id) {
         Optional<GoodsViewDTO> goodsViewDTOOptional = findIfPresent(id);
         goodsViewDTOOptional.ifPresent((goodsDto) -> {
@@ -32,6 +48,10 @@ public class Cart {
         });
     }
 
+    /**
+     * delete position in MAP by id
+     * @param id goods id
+     */
     public void deleteGoods(int id) {
         Optional<GoodsViewDTO> goodsViewDTOOptional = findIfPresent(id);
         goodsViewDTOOptional.ifPresent(cart::remove);
@@ -43,6 +63,10 @@ public class Cart {
                 .findAny();
     }
 
+    /**
+     *Return sum of all purchases in cart. uses in cart.jsp
+     * @return sum all purchases (String)
+     */
     public String cartTotalPrice() {
         Set<Map.Entry<GoodsViewDTO, Integer>> goods = cart.entrySet();
         BigDecimal result = new BigDecimal(0);

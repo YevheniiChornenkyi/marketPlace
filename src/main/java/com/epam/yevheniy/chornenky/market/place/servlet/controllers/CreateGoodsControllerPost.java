@@ -12,6 +12,12 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ *  used when requesting POST/action/goods
+ *  receive from request new goods parameter and create createGoodsDTO
+ *  make simple backend validation if fail set to session attribute errorMap and redirect to goods page
+ *  send redirect to order page with created=true parameters
+ */
 public class CreateGoodsControllerPost extends PageController {
 
     public static final String URL_TO_GOODS = "/goods";

@@ -2,16 +2,20 @@ package com.epam.yevheniy.chornenky.market.place.repositories.entities;
 
 import java.sql.Timestamp;
 
+/**
+ * Goods entity. This transfer object characterized by name, model, id, price, category, imageName, description, manufacturer, created.
+ * id must be unique.
+ */
 public class GoodsEntity {
-    private String name;
-    private String model;
-    private Integer id;
-    private String price;
-    private CategoryEntity category;
-    private String imageName;
-    private String description;
-    private ManufacturerEntity manufacturer;
-    private Timestamp created;
+    private final String name;
+    private final String model;
+    private final Integer id;
+    private final String price;
+    private final CategoryEntity category;
+    private final String imageName;
+    private final String description;
+    private final ManufacturerEntity manufacturer;
+    private final Timestamp created;
 
     public GoodsEntity(String name, String model, Integer id, String price, CategoryEntity category, String imageName, String description, ManufacturerEntity manufacturer, Timestamp created) {
         this.name = name;

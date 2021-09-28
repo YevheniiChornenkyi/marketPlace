@@ -6,8 +6,6 @@ import com.epam.yevheniy.chornenky.market.place.repositories.entities.OrderEntit
 import com.epam.yevheniy.chornenky.market.place.servlet.dto.CreateOrderDTO;
 import com.epam.yevheniy.chornenky.market.place.servlet.dto.GoodsViewDTO;
 import com.epam.yevheniy.chornenky.market.place.servlet.dto.OrderViewDTO;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,14 +16,16 @@ import java.util.stream.Collectors;
 
 public class OrderService {
 
-    private static final Logger LOGGER = LogManager.getLogger(OrderService.class);
-
     private final OrderRepository orderRepository;
 
     public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
+    /**
+     * convert received createOrderDto to OrderEntity and send to repository lvl
+     * @param createOrderDTO order parameters
+     */
     public void createOrder(CreateOrderDTO createOrderDTO) {
         Cart cart = createOrderDTO.getCart();
         List<OrderEntity.OrderItem> orderItems = new ArrayList<>();
@@ -54,6 +54,10 @@ public class OrderService {
         orderRepository.createOrder(orderEntity);
     }
 
+    /**
+     * Convert orderEntity received from repository level to orderViewDto
+     * @return List<OrderViewDTO>
+     */
     public List<OrderViewDTO> getOrderViewDTOList() {
         List<OrderEntity> orderEntities = orderRepository.getOrderEntitiesList();
 
@@ -63,6 +67,11 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Convert orderEntity to orderViewDto
+     * @param orderEntity orderEntity
+     * @return OrderViewDTO
+     */
     private OrderViewDTO orderEntityToOrderViewDTO(OrderEntity orderEntity) {
         String orderId = orderEntity.getOrderId();
         String userId = orderEntity.getUserId();
@@ -77,6 +86,11 @@ public class OrderService {
         return new OrderViewDTO(orderId, userId, status, address, phoneNumber, price, orderItemViewDTOList);
     }
 
+    /**
+     * convert OrderItem to OrderItemViewDTO
+     * @param orderItem orderItem
+     * @return OrderItemViewDTO
+     */
     private OrderViewDTO.OrderItemViewDTO orderItemToOrderItemViewDTO(OrderEntity.OrderItem orderItem) {
         String orderItemId = orderItem.getOrderItemId();
         String parentOrderId = orderItem.getParentOrderId();
@@ -89,6 +103,11 @@ public class OrderService {
         return new OrderViewDTO.OrderItemViewDTO(orderItemId, parentOrderId, goodsId, quantity, price, totalPrice);
     }
 
+    /**
+     * Convert orderEntity received from repository level to orderViewDto
+     * @param userId user id whose orders we are looking for
+     * @return List<OrderViewDTO>
+     */
     public List<OrderViewDTO> getOrderViewDTOListById(String userId) {
         List<OrderEntity> orderEntities = orderRepository.getOrderEntityListById(userId);
 
@@ -97,14 +116,19 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * return statuses list received from repository lvl
+     * @return List<OrderEntity.Status>
+     */
     public List<OrderEntity.Status> getAllStatuses() {
         return orderRepository.getAllStatusesEnum();
     }
 
-    private String extractStatusNameFromStatusEnum(OrderEntity.Status status) {
-        return status.getStatusView();
-    }
-
+    /**
+     * send to repository id order and his new status
+     * @param orderId order id
+     * @param newStatus new status
+     */
     public void changeOrderStatusById(String orderId, String newStatus) {
         orderRepository.changeOrderStatusById(orderId, newStatus);
     }

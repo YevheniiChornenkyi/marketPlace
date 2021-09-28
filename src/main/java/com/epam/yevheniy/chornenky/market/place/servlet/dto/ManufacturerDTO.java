@@ -1,10 +1,10 @@
 package com.epam.yevheniy.chornenky.market.place.servlet.dto;
 
-public class ManufacturerDto {
+public class ManufacturerDTO {
     private final int manufacturerId;
     private final String manufacturerName;
 
-    public ManufacturerDto(int manufacturerId, String manufacturerName) {
+    public ManufacturerDTO(int manufacturerId, String manufacturerName) {
         this.manufacturerId = manufacturerId;
         this.manufacturerName = manufacturerName;
     }

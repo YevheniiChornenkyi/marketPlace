@@ -5,6 +5,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * used when requesting GET/action/empty-cart
+ * make forward to empty-cart.jsp
+ */
 public class EmptyCartController extends PageController{
 
     public static final String JSP_PATH = "/WEB-INF/jsp/empty-cart.jsp";

@@ -2,13 +2,10 @@ package com.epam.yevheniy.chornenky.market.place.repositories;
 
 import com.epam.yevheniy.chornenky.market.place.db.ConnectionManager;
 import com.epam.yevheniy.chornenky.market.place.exceptions.DBException;
-import com.epam.yevheniy.chornenky.market.place.exceptions.OrderException;
-import com.epam.yevheniy.chornenky.market.place.models.Cart;
 import com.epam.yevheniy.chornenky.market.place.models.SiteFilter;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.CategoryEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.GoodsEntity;
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.ManufacturerEntity;
-import com.epam.yevheniy.chornenky.market.place.repositories.entities.OrderEntity;
 import com.epam.yevheniy.chornenky.market.place.servlet.dto.GoodsViewDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,18 +15,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Class unites the logic of accessing the database related to goods
+ * accepts a connectionManager
+ */
 public class GoodsRepository {
+    private static final Logger LOGGER = LogManager.getLogger(GoodsRepository.class);
 
-    public static final String FIND_ALL_QUERY = "SELECT goods.name, goods.id AS goods_id, goods.model, goods.price, categories.category_name, categories.id AS category_id, goods.image_name, goods.description, manufacturers.manufacturer_name, manufacturers.id AS manufacturer_id , goods.created FROM goods LEFT JOIN categories ON goods.category=categories.id LEFT JOIN manufacturers ON goods.manufacturer=manufacturers.id";
-    public static final String FIND_GOODS_BY_ID_QUERY = FIND_ALL_QUERY + " WHERE goods.id=?";
-    private static final Logger LOGGER = LogManager.getLogger(ConnectionManager.class);
-    public static final String INSERT_GOODS_QUERY = "INSERT INTO goods (name, model, price, category, image_name, description, manufacturer) VALUE (?, ?, ?, ?, ?, ?, ?)";
-    public static final String FIND_CATEGORY_BY_ID_QUERY = "SELECT categories.category_name, categories.id FROM categories WHERE id=?";
-    public static final String FIND_MANUFACTURER_BY_ID_QUERY = "SELECT manufacturers.id, manufacturers.manufacturer_name FROM manufacturers WHERE id=?";
-    public static final String FIND_ALL_CATEGORIES_QUERY = "SELECT * FROM categories";
-    public static final String FIND_ALL_MANUFACTURERS_QUERY = "SELECT manufacturers.id, manufacturers.manufacturer_name FROM manufacturers";
-    public static final String EDIT_GOODS_QUERY = "UPDATE goods SET name=?, model=?, price=?, category=?, image_name=?, description=?, manufacturer=?, created=? WHERE id=?";
-    public static final String TEMPLATE_SORTED_GOODS_QUERY = "SELECT goods.id, goods.name, goods.model, goods.price, categories.category_name, goods.image_name, goods.description, manufacturers.manufacturer_name, goods.created FROM goods LEFT JOIN categories ON goods.category=categories.id LEFT JOIN manufacturers ON goods.manufacturer=manufacturers.id ";
+    private static final String FIND_ALL_QUERY = "SELECT goods.name, goods.id AS goods_id, goods.model, goods.price, categories.category_name, categories.id AS category_id, goods.image_name, goods.description, manufacturers.manufacturer_name, manufacturers.id AS manufacturer_id , goods.created FROM goods LEFT JOIN categories ON goods.category=categories.id LEFT JOIN manufacturers ON goods.manufacturer=manufacturers.id";
+    private static final String FIND_GOODS_BY_ID_QUERY = FIND_ALL_QUERY + " WHERE goods.id=?";
+    private static final String INSERT_GOODS_QUERY = "INSERT INTO goods (name, model, price, category, image_name, description, manufacturer) VALUE (?, ?, ?, ?, ?, ?, ?)";
+    private static final String FIND_CATEGORY_BY_ID_QUERY = "SELECT categories.category_name, categories.id FROM categories WHERE id=?";
+    private static final String FIND_MANUFACTURER_BY_ID_QUERY = "SELECT manufacturers.id, manufacturers.manufacturer_name FROM manufacturers WHERE id=?";
+    private static final String FIND_ALL_CATEGORIES_QUERY = "SELECT * FROM categories";
+    private static final String FIND_ALL_MANUFACTURERS_QUERY = "SELECT manufacturers.id, manufacturers.manufacturer_name FROM manufacturers";
+    private static final String EDIT_GOODS_QUERY = "UPDATE goods SET name=?, model=?, price=?, category=?, image_name=?, description=?, manufacturer=?, created=? WHERE id=?";
+    private static final String TEMPLATE_SORTED_GOODS_QUERY = "SELECT goods.id, goods.name, goods.model, goods.price, categories.category_name, goods.image_name, goods.description, manufacturers.manufacturer_name, goods.created FROM goods LEFT JOIN categories ON goods.category=categories.id LEFT JOIN manufacturers ON goods.manufacturer=manufacturers.id ";
 
     private final ConnectionManager connectionManager;
 
@@ -37,6 +38,10 @@ public class GoodsRepository {
         this.connectionManager = connectionManager;
     }
 
+    /**
+     * contacts the database and return all goods from the database in List<GoodsEntity> format
+     * @return list of all goods from the database
+     */
     public List<GoodsEntity> findAll() {
         List<GoodsEntity> goodsEntityList = new ArrayList<>();
 
@@ -56,6 +61,14 @@ public class GoodsRepository {
         return goodsEntityList;
     }
 
+    /**
+     * collects goodsEntity from the received parameters
+     * @param resultSet extract goodsEntity parameters from this resultSet
+     * @param category goods categoryEntity
+     * @param manufacturer goods manufacturerEntity
+     * @return goodsEntity
+     * @throws SQLException Handled above
+     */
     private GoodsEntity createGoodsEntity(ResultSet resultSet, CategoryEntity category,
                                           ManufacturerEntity manufacturer) throws SQLException {
 
@@ -70,18 +83,35 @@ public class GoodsRepository {
         return new GoodsEntity(name, model, id, price, category, imageName, description, manufacturer, created);
     }
 
+    /**
+     * extract category_id from resultSet and return created categoryEntity
+     * @param resultSet database resultSet
+     * @return CategoryEntity
+     * @throws SQLException Handled above
+     */
     private CategoryEntity extractCategory(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("category_id");
         String name = resultSet.getString("category_name");
         return new CategoryEntity(id, name);
     }
 
+    /**
+     * extract manufacturer_id from resultSet and return created manufacturerEntity
+     * @param resultSet database resultSet
+     * @return ManufacturerEntity
+     * @throws SQLException Handled above
+     */
     private ManufacturerEntity extractManufacturer(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("manufacturer_id");
         String name = resultSet.getString("manufacturer_name");
         return new ManufacturerEntity(id, name);
     }
 
+    /**
+     * Accesses the database to search for the manufacturer by ID, returns the optional of the found one. empty if found nothing
+     * @param manufacturer manufacturer id
+     * @return Optional<ManufacturerEntity> empty if not found
+     */
     public Optional<ManufacturerEntity> findManufacturerById(int manufacturer) {
         try(Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_MANUFACTURER_BY_ID_QUERY);
@@ -100,6 +130,11 @@ public class GoodsRepository {
         }
     }
 
+    /**
+     *  Accesses the database to search for the category by ID, returns the optional of the found one. empty if found nothing
+     * @param category category id
+     * @return Optional<CategoryEntity> empty if not found
+     */
     public Optional<CategoryEntity> findCategoryById(int category) {
         try (Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_CATEGORY_BY_ID_QUERY);
@@ -118,6 +153,9 @@ public class GoodsRepository {
         }
     }
 
+    /**
+     * Accepts GoodsEntity. Takes goods parameter from entity and sent query to database.
+     */
     public void createGoods(GoodsEntity goodsEntity) {
         String name = goodsEntity.getName();
         String model = goodsEntity.getModel();
@@ -142,6 +180,10 @@ public class GoodsRepository {
         }
     }
 
+    /**
+     * Send query to database who is select all Categories, save in CategoryEntity format and return List<CategoryEntity>
+     * @return List of all CategoryEntity
+     */
     public List<CategoryEntity> findAllCategories() {
         try(Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_CATEGORIES_QUERY);
@@ -159,6 +201,10 @@ public class GoodsRepository {
         }
     }
 
+    /**
+     * Send query to database who is select all Manufacturers, save in ManufacturerEntity format and return List<ManufacturerEntity>
+     * @return List of all ManufacturerEntity
+     */
     public List<ManufacturerEntity> findAllManufacturers() {
         try(Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_MANUFACTURERS_QUERY);
@@ -176,6 +222,11 @@ public class GoodsRepository {
         }
     }
 
+    /**
+     * Send query to database. Select goods by id. Return founded goods in Optional<GoodsEntity> format. Empty if not found.
+     * @param goodsId goods id
+     * @return Optional<GoodsId> empty if not found
+     */
     public Optional<GoodsEntity> findGoodsById(String goodsId) {
 
         try (Connection connection = connectionManager.getConnection()) {
@@ -195,6 +246,10 @@ public class GoodsRepository {
         }
     }
 
+    /**
+     * Accept goodsEntity. Extract from entity goods parameter. Sent update query to database. using goodsId to found specific goods.
+     * @param goodsEntity goodsEntity with new goods parameter.
+     */
     public void editGoods(GoodsEntity goodsEntity) {
         int id = goodsEntity.getId();
         String name = goodsEntity.getName();
@@ -224,6 +279,11 @@ public class GoodsRepository {
         }
     }
 
+    /**
+     * Accept siteFilter. Select ass goods from database and sorted with specified in siteFilter parameters.
+     * @param siteFilter site filter
+     * @return sorted goods in List<GoodsViewDTO> format
+     */
     public List<GoodsViewDTO> getSortedGoodsViewDtoList(SiteFilter siteFilter) {
         try(Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(querySortedGoodsViewDtoList(siteFilter));
@@ -249,6 +309,11 @@ public class GoodsRepository {
         }
     }
 
+    /**
+     * Generates a query depending on the specified in siteFilter parameters.
+     * @param siteFilter site filter
+     * @return database query
+     */
     private String querySortedGoodsViewDtoList(SiteFilter siteFilter) {
         List<Integer> categories = siteFilter.getCategories();
         SiteFilter.SortedType sortedType = siteFilter.getSortedType();

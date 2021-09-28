@@ -12,6 +12,13 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * used when requesting POST/action/edit
+ * receive from request goods new parameters and create goodsCreateDTO
+ * make simple image and price validation if fail set attribute to session exceptionMap. Send redirect to edit page
+ * send to goodsService created goodsCreateDTO
+ * send redirect to edit with parameter created=true
+ */
 public class EditPOSTController extends PageController {
 
     public static final String URL_TO_EDIT = "/edit";

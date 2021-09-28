@@ -13,24 +13,45 @@ public class RegistrarValidator {
 
     private RegistrarValidator() {}
 
+    /**
+     * back-end login validation
+     * login must be email
+     * @param login login
+     * @return boolean
+     */
     public static boolean loginValidate(String login) {
         Pattern p = Pattern.compile(LOGIN_REGEX);
         Matcher matcher = p.matcher(login);
         return matcher.matches();
     }
 
+    /**
+     * back-end login validation
+     * psw must contains latin and numbers more than 6 characters
+     * @param psw psw
+     * @return boolean
+     */
     public static boolean pswValidate(String psw) {
         Pattern p = Pattern.compile(PSW_REGEX);
         Matcher matcher = p.matcher(psw);
         return matcher.matches();
     }
 
+    /**
+     * back-end login validation
+     * psw must contains latin and numbers more than 6 characters
+     * throw ValidationException if not
+     * @param psw psw
+     */
     public static void pswValidateThrow(String psw) {
         if (!pswValidate(psw)) {
             throw new ValidationException(Map.of("psw", "msg.psw-format-false"));
         }
     }
 
+    /**
+     * equals two received in parameters string. Return result
+     */
     public static boolean pswRepeatValidate(String psw, String pswRepeat) {
         return psw.equals(pswRepeat);
     }

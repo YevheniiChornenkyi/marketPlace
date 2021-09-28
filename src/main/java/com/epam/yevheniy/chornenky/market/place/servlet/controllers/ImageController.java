@@ -10,6 +10,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * used when requesting GET/action/image
+ */
 public class ImageController extends PageController {
 
     private final ImageService imageService;

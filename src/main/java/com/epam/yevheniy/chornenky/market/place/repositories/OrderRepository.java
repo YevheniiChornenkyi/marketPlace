@@ -14,6 +14,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class unites the logic of accessing the database related to order
+ * accepts a connectionManager
+ */
 public class OrderRepository {
 
     private static final Logger LOGGER = LogManager.getLogger(OrderRepository.class);
@@ -31,6 +35,11 @@ public class OrderRepository {
         this.connectionManager = connectionManager;
     }
 
+    /**
+     * Extract order parameters from entity. Sent query to save new order.
+     * order positions saved to database another query and all operations wrapped in transaction.
+     * @param orderEntity contains order parameters
+     */
     public void createOrder(OrderEntity orderEntity) {
         String orderId = orderEntity.getOrderId();
         String userId = orderEntity.getUserId();
@@ -57,6 +66,12 @@ public class OrderRepository {
         }
     }
 
+    /**
+     * Send queries for save every position in database. All position have same orderId accepted in parameters.
+     * @param connection the same connection that was used to create the order
+     * @param orderEntity contains all positions in List<OrderItem> format
+     * @throws SQLException handled above
+     */
     private void fillOrderByOrdersItem(Connection connection, OrderEntity orderEntity) throws SQLException {
         for (OrderEntity.OrderItem orderItem : orderEntity.getOrderItems()) {
             String orderItemId = orderItem.getOrderItemId();
@@ -76,6 +91,10 @@ public class OrderRepository {
         }
     }
 
+    /**
+     * Send query to database. Select all orders and transform on OrderEntity format.
+     * @return List<OrderEntity>
+     */
     public List<OrderEntity> getOrderEntitiesList() {
         try(Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_ORDERS_QUERY);
@@ -87,6 +106,53 @@ public class OrderRepository {
         }
     }
 
+    /**
+     * Send query to database. Select all orders by accepted in parameters userId.
+     * @param userId user id
+     * @return List<OrderEntity> by userId specified in parameters
+     */
+    public List<OrderEntity> getOrderEntityListById(String userId) {
+        try(Connection connection = connectionManager.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM orders WHERE orders.user_id=?");
+            preparedStatement.setString(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return extractOrderEntityFromResultSet(resultSet, connection);
+        } catch (SQLException e) {
+            LOGGER.error("Cant find orders user with id {}", userId);
+            throw new DBException();
+        }
+    }
+
+    /**
+     * Extract OrderEntities from accepted resultSet. Return in List<OrderEntity> format
+     * @param resultSet resultSet contains OrderEntity parameters
+     * @param connection required to call the method
+     * @return List<OrderEntity>
+     * @throws SQLException processed above
+     */
+    private List<OrderEntity> extractOrderEntityFromResultSet(ResultSet resultSet, Connection connection) throws SQLException {
+        List<OrderEntity> orderEntities = new ArrayList<>();
+        while (resultSet.next()) {
+            String orderId = resultSet.getString("order_id");
+            String userId = resultSet.getString("user_id");
+            OrderEntity.Status status = OrderEntity.Status.valueOf(resultSet.getString("status"));
+            String address = resultSet.getString("address");
+            String phoneNumber = resultSet.getString("phone_number");
+            String price = resultSet.getString("price");
+            List<OrderEntity.OrderItem> orderItems = getOrderItemsByOrderId(orderId, connection);
+            OrderEntity orderEntity = new OrderEntity(orderId, userId, status, address, phoneNumber, price, orderItems);
+            orderEntities.add(orderEntity);
+        }
+        return orderEntities;
+    }
+
+    /**
+     * Send query to database. Select all positions(Order items) of order who have specified in parameters id.
+     * @param orderId order id
+     * @param connection connection to database
+     * @return List<OrderItem>
+     * @throws SQLException processed above
+     */
     private List<OrderEntity.OrderItem> getOrderItemsByOrderId(String orderId, Connection connection) throws SQLException {
         List<OrderEntity.OrderItem> orderItems = new ArrayList<>();
         PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDERS_ITEM_BY_ORDER_ID);
@@ -105,34 +171,10 @@ public class OrderRepository {
         return orderItems;
     }
 
-    private List<OrderEntity> extractOrderEntityFromResultSet(ResultSet resultSet, Connection connection) throws SQLException {
-        List<OrderEntity> orderEntities = new ArrayList<>();
-        while (resultSet.next()) {
-            String orderId = resultSet.getString("order_id");
-            String userId = resultSet.getString("user_id");
-            OrderEntity.Status status = OrderEntity.Status.valueOf(resultSet.getString("status"));
-            String address = resultSet.getString("address");
-            String phoneNumber = resultSet.getString("phone_number");
-            String price = resultSet.getString("price");
-            List<OrderEntity.OrderItem> orderItems = getOrderItemsByOrderId(orderId, connection);
-            OrderEntity orderEntity = new OrderEntity(orderId, userId, status, address, phoneNumber, price, orderItems);
-            orderEntities.add(orderEntity);
-        }
-        return orderEntities;
-    }
-
-    public List<OrderEntity> getOrderEntityListById(String userId) {
-        try(Connection connection = connectionManager.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM orders WHERE orders.user_id=?");
-            preparedStatement.setString(1, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            return extractOrderEntityFromResultSet(resultSet, connection);
-        } catch (SQLException e) {
-            LOGGER.error("Cant find orders user with id {}", userId);
-            throw new DBException();
-        }
-    }
-
+    /**
+     * Select all order statuses from database. Save like Enum. Return List<Status> format
+     * @return List<OrderEntity.Status>
+     */
     public List<OrderEntity.Status> getAllStatusesEnum() {
         try(Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_STATUSES_QUERY);
@@ -148,6 +190,11 @@ public class OrderRepository {
         }
     }
 
+    /**
+     * Send query to database. Change order status with accepted orderId to accepted newStatus status
+     * @param orderId order id
+     * @param newStatus new order status
+     */
     public void changeOrderStatusById(String orderId, String newStatus) {
         try(Connection connection = connectionManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_STATUS_BY_ID);

@@ -1,7 +1,6 @@
 package com.epam.yevheniy.chornenky.market.place.filters;
 
 import com.epam.yevheniy.chornenky.market.place.repositories.entities.UserEntity;
-import com.epam.yevheniy.chornenky.market.place.services.UserService;
 import com.epam.yevheniy.chornenky.market.place.servlet.controllers.utils.SessionUtils;
 
 import javax.servlet.FilterChain;
@@ -25,8 +24,6 @@ public class SecurityFilter extends HttpFilter {
      * @param request - HTTP servlet request
      * @param response - HTTP servlet response
      * @param chain - Filter chain
-     * @throws IOException
-     * @throws ServletException
      */
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {

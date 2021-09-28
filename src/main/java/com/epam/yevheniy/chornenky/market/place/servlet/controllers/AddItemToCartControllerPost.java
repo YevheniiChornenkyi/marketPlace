@@ -12,6 +12,13 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * used when requesting POST/action/home-page
+ * receive from request goodsID
+ * receive from request flag action(String)
+ * calls the appropriate method depending on the value of the flag
+ * and redirect to Cart page
+ */
 public class AddItemToCartControllerPost extends PageController {
     private static final String URL_TO_HOME_PAGE = "/home-page";
     private static final String URL_TO_CART = "/cart";
@@ -35,24 +42,36 @@ public class AddItemToCartControllerPost extends PageController {
 
     }
 
+    /**
+     * increase goods count with received id
+     */
     private void increaseGoodsCount(HttpServletRequest req, HttpServletResponse resp, String goodsId, Cart cart) throws IOException {
         cart.increaseGoodsCount(Integer.parseInt(goodsId));
         SessionUtils.saveCartToSession(req, cart);
         resp.sendRedirect(URL_TO_CART);
     }
 
+    /**
+     * decrease goods count with received id
+     */
     private void decreaseGoodsCount(HttpServletRequest req, HttpServletResponse resp, String goodsId, Cart cart) throws IOException {
         cart.decreaseGoodsCount(Integer.parseInt(goodsId));
         SessionUtils.saveCartToSession(req, cart);
         resp.sendRedirect(URL_TO_CART);
     }
 
+    /**
+     * delete goods with received id
+     */
     private void deleteGoods(HttpServletRequest req, HttpServletResponse resp, String goodsId, Cart cart) throws IOException {
         cart.deleteGoods(Integer.parseInt(goodsId));
         SessionUtils.saveCartToSession(req, cart);
         resp.sendRedirect(URL_TO_CART);
     }
 
+    /**
+     * add goods with received id to received cart
+     */
     private void addToCart(HttpServletRequest req, HttpServletResponse resp, String goodsId, Cart cart) throws IOException {
         Optional<GoodsViewDTO> goodsViewDTOOptional = goodsService.getById(goodsId);
         goodsViewDTOOptional.ifPresent(cart::addToCart);
@@ -60,6 +79,9 @@ public class AddItemToCartControllerPost extends PageController {
         resp.sendRedirect(URL_TO_HOME_PAGE);
     }
 
+    /**
+     * an interface that can be put into a MAP
+     */
     interface CartAction {
         void action(HttpServletRequest request, HttpServletResponse response, String goodsId, Cart cart) throws IOException;
     }

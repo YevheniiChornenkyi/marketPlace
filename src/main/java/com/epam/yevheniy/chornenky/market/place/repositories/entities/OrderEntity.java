@@ -2,6 +2,12 @@ package com.epam.yevheniy.chornenky.market.place.repositories.entities;
 
 import java.util.List;
 
+/**
+ * Order entity. This transfer object characterized by orderId, userId, status, address, phoneNumber, price, orderItems.
+ * orderItems a separate class with its own parameters
+ * Status enum enumeration of fashionable status's
+ * id must be unique.
+ */
 public class OrderEntity {
 
     private final String orderId;
@@ -68,6 +74,11 @@ public class OrderEntity {
         }
     }
 
+    /**
+     * Part of Order entity
+     * This transfer object characterized by orderItemId, parentOrderId, goodsId, quantity, price, totalPrice.
+     * orderItemId, parentOrderId must be unique.
+     */
     public static class OrderItem {
         private final String orderItemId;
         private final String parentOrderId;

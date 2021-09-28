@@ -27,6 +27,10 @@ public class ConnectionManager {
         LOGGER.debug("New connection manager has been created");
     }
 
+    /**
+     * dbDriver/dbURL/dbName/dbUsername/dbPassword indicate in web.xml
+     * @return new connection go database.
+     */
     public Connection getConnection() {
         try {
             if (!dbDriverLoaded) {

@@ -13,6 +13,13 @@ public class ActivationController extends PageController{
     public static final String JSP_TO_ACTIVATION = "/WEB-INF/jsp/activation.jsp";
     private final UserService userService;
 
+    /**
+     * used when requesting GET/action/activation
+     * receive activation key from request
+     * send key to service lvl set activation=true to session attribute and forward to activation.jsp
+     * if service throw exception set activation=false to session attribute and forward to activation.jsp
+     * @param userService userService
+     */
     public ActivationController(UserService userService) {
         this.userService = userService;
     }

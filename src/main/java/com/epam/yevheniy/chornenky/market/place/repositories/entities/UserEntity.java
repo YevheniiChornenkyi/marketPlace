@@ -1,7 +1,11 @@
 package com.epam.yevheniy.chornenky.market.place.repositories.entities;
 
+/**
+ * User entity. This transfer object characterized by name, surName, psw, email, role, id, isActive.
+ * Role enum enumeration of fashionable status's
+ * id must be unique.
+ */
 public class UserEntity {
-
 
     private final String name;
     private final String surName;
