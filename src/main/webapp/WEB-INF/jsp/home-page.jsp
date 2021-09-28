@@ -27,8 +27,10 @@
                             <div>
                                 <div><h6><fmt:message key="msg.welcome" bundle="${message}"/> ${authentication.getName()} ${authentication.getSurName()}.</h6></div>
                                 <div style="display:inline-block;white-space:nowrap;">
-                                <button onclick="location.href='logout'" class="cart-acc-button"><fmt:message key="msg.LOGOUT" bundle="${menu}"/></button>
-                                <button onclick="location.href='orders'" class="cart-acc-button "><fmt:message key="msg.my-orders" bundle="${menu}"/></button>
+                                <c:if test="${authentication.getRole().getId() eq '2'}">
+                                    <button onclick="location.href='logout'" class="cart-acc-button"><fmt:message key="msg.LOGOUT" bundle="${menu}"/></button>
+                                    <button onclick="location.href='orders'" class="cart-acc-button "><fmt:message key="msg.my-orders" bundle="${menu}"/></button>
+                                </c:if>
                                 </div>
                             </div>
                         </c:otherwise>
@@ -51,6 +53,7 @@
                     <button onclick="location.href='goods'" class="cart-acc-button "><fmt:message key="msg.add-new-product" bundle="${menu}"/></button>
                     <button onclick="location.href='users'" class="cart-acc-button "><fmt:message key="msg.users" bundle="${menu}"/></button>
                     <button onclick="location.href='orders'" class="cart-acc-button "><fmt:message key="msg.orders" bundle="${menu}"/></button>
+                    <button onclick="location.href='logout'" class="cart-acc-button"><fmt:message key="msg.LOGOUT" bundle="${menu}"/></button>
                 </div>
             </c:if>
 

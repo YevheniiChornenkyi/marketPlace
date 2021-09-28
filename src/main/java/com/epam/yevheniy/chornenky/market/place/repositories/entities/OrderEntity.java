@@ -59,7 +59,7 @@ public class OrderEntity {
     public enum Status {
         AWAITING_DELIVERY("Awaiting delivery"),
         AWAITING_PICKUP("Awaiting pickup"),
-        CANCELED("Canceled"),
+        CANCELLED("Cancelled"),
         UNCONFIRMED("Unconfirmed"),
         PROCESSED("Processed");
 

@@ -28,10 +28,10 @@ CREATE TABLE users(
 );
 
 INSERT INTO users (id, name, surname, psw, role_id, email) VALUES ("1", "Yevheniy" , "Chornenkiy", "16B1BE10A1231B71A11E711F1261641B81AE1BB1721F1124", "1", "evgeny.chornenky@gmail.com" );
-INSERT INTO users (id, name, surname, psw, role_id, email, is_active) VALUES ("2", "Boris" , "Menethil", "16B1BE10A1231B71A11E711F1261641B81AE1BB1721F1124", "2", "boris@gmail.com", 0);
+INSERT INTO users (id, name, surname, psw, role_id, email, is_active) VALUES ("2", "Boris" , "Menethil", "16B1BE10A1231B71A11E711F1261641B81AE1BB1721F1124", "2", "boris@gmail.com", 1);
 INSERT INTO users (id, name, surname, psw, role_id, email, is_active) VALUES ("3", "Dmitrii" , "Hellscream", "16B1BE10A1231B71A11E711F1261641B81AE1BB1721F1124", "2", "anton@gmail.com", 1);
-INSERT INTO users (id, name, surname, psw, role_id, email, is_active) VALUES ("4", "Bogdan" , "Lightbringer", "16B1BE10A1231B71A11E711F1261641B81AE1BB1721F1124", "2", "anton@gmail.com", 1);
-INSERT INTO users (id, name, surname, psw, role_id, email, is_active) VALUES ("5", "Vitaly" , "Fordring", "16B1BE10A1231B71A11E711F1261641B81AE1BB1721F1124", "2", "anton@gmail.com", 1);
+INSERT INTO users (id, name, surname, psw, role_id, email, is_active) VALUES ("4", "Bogdan" , "Lightbringer", "16B1BE10A1231B71A11E711F1261641B81AE1BB1721F1124", "2", "bla@gmail.com", 1);
+INSERT INTO users (id, name, surname, psw, role_id, email, is_active) VALUES ("5", "Vitaly" , "Fordring", "16B1BE10A1231B71A11E711F1261641B81AE1BB1721F1124", "2", "qwe@gmail.com", 1);
 
 CREATE TABLE categories (
      id INT NOT NULL AUTO_INCREMENT,
@@ -110,7 +110,7 @@ INSERT INTO statuses (status) VALUES ("UNCONFIRMED");
 INSERT INTO statuses (status) VALUES ("PROCESSED");
 INSERT INTO statuses (status) VALUES ("AWAITING_DELIVERY");
 INSERT INTO statuses (status) VALUES ("AWAITING_PICKUP");
-INSERT INTO statuses (status) VALUES ("CANCELED");
+INSERT INTO statuses (status) VALUES ("CANCELLED");
 
 CREATE TABLE orders (
     order_id VARCHAR(40) NOT NULL,
@@ -129,8 +129,8 @@ CREATE TABLE orders (
             ON DELETE CASCADE
 );
 
-INSERT INTO orders (order_id, user_id, status, address, phone_number, price) VALUES ("1", "3", "PROCESSED", "bread factory","88004004455", "1998");
-INSERT INTO orders (order_id, user_id, status, address, phone_number, price) VALUES ("2", "3", "PROCESSED", "Feanor street 29","88004004455", "2666");
+INSERT INTO orders (order_id, user_id, status, address, phone_number, price) VALUES ("1", "1", "PROCESSED", "bread factory","88004004455", "1998");
+INSERT INTO orders (order_id, user_id, status, address, phone_number, price) VALUES ("2", "1", "PROCESSED", "Feanor street 29","88004004455", "2666");
 
 CREATE TABLE order_item (
     order_item_id VARCHAR(60) NOT NULL,
